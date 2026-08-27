@@ -42,7 +42,6 @@
   --r-lg:  10px;
 
   --bar:   86px;
-  --badge: 58px;   /* brandmark emblem diameter */
 }
 
 /* --- Base ---------------------------------------------------------------- */
@@ -172,39 +171,17 @@ a { color: inherit; text-decoration: none; }
   min-height: var(--bar);
 }
 
-/* Brandmark: circular emblem + wordmark. The emblem carries its own set text,
-   but at header scale that text is only a few pixels tall, so the legible name
-   is set alongside it rather than relying on the artwork. */
-.brandmark { display: inline-flex; align-items: center; gap: .7rem; }
+/* Horizontal robot logo. The transparent artwork includes the complete
+   wordmark, so it remains a single, scalable brand asset at every breakpoint. */
+.brandmark { display: inline-flex; align-items: center; flex: 0 0 auto; }
 
-.brandmark__badge {
-  width: var(--badge); height: var(--badge);
+.brandmark__logo {
+  width: clamp(11rem, 17vw, 13rem);
+  height: auto;
   flex: 0 0 auto;
-  border-radius: 50%;
 }
 
-.brandmark__type { display: flex; flex-direction: column; line-height: 1.05; }
-
-.brandmark__name {
-  font-family: var(--display);
-  font-weight: 800;
-  font-stretch: 108%;
-  font-size: 1.12rem;
-  letter-spacing: -.005em;
-  color: var(--ink);
-}
-.brandmark__sub {
-  font-family: var(--mono);
-  font-size: .58rem;
-  letter-spacing: .19em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-top: .18rem;
-}
-
-.brandmark--lg { --badge: 64px; }
-.brandmark--lg .brandmark__name { font-size: 1.3rem; }
-.brandmark--lg .brandmark__sub { font-size: .62rem; }
+.brandmark--lg .brandmark__logo { width: min(100%, 15rem); }
 
 .masthead__nav {
   display: flex;
@@ -721,8 +698,6 @@ a { color: inherit; text-decoration: none; }
   grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: 3rem;
 }
-/* target the wrapper, not `img` — an element selector here would outrank
-   .brandmark__badge and reset the emblem's dimensions */
 .foot__brand .brandmark { margin-bottom: 1.25rem; }
 .foot__brand p { color: var(--faint); font-size: .9rem; max-width: 26ch; }
 
@@ -796,6 +771,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 680px) {
+  .brandmark__logo { width: 10.75rem; }
   .hero { padding-top: calc(var(--bar) + 3rem); padding-bottom: 4rem; }
   .services, .how, .trust, .faq, .about, .book { padding-block: 4.5rem; }
   .services__grid { grid-template-columns: 1fr; }
