@@ -27,4 +27,4 @@ Allow: /
 User-agent: Bytespider
 Disallow: /
 
-Sitemap: https://sarranai.com/sitemap.xml
+Sitemap: https://www.sarranai.com/sitemap.xml

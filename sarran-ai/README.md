@@ -153,7 +153,7 @@ would need a JSON response to match the contract `main.js` expects.
       case material — review for accuracy before publishing.
 - [ ] Confirm the LinkedIn URL and phone number.
 - [x] Set canonical and Open Graph production URLs and image metadata.
-- [x] Add `robots.txt` and `sitemap.xml` for `https://sarranai.com/`.
+- [x] Add `robots.txt` and `sitemap.xml` for `https://www.sarranai.com/`.
 - [x] Add visible FAQ answers with matching FAQPage structured data.
 - [x] Add WebSite, Organization, ProfessionalService, and Service entity relationships.
 - [x] Publish `llms.txt` as a supplementary machine-readable business summary.

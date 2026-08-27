@@ -4,25 +4,25 @@
 
 ## Services
 
-- [AI Assessments and Strategy](https://sarranai.com/#services): Explains the 45-minute discovery call, ranked opportunity plan, verified tool costs, and four-day starting plan.
-- [Intelligent AI Voice Agents](https://sarranai.com/#services): Covers inbound answering, caller qualification, calendar booking, approved outbound follow-up, transcripts, and reporting.
-- [AI-Integrated Web Development](https://sarranai.com/#services): Describes performance-focused websites with targeted AI qualification, routing, and answer capabilities.
-- [Workflow and Task Automation](https://sarranai.com/#services): Covers scheduled and event-triggered automation for intake, data movement, reporting, invoicing, and follow-up.
+- [AI Assessments and Strategy](https://www.sarranai.com/ai-readiness-assessment.html): Explains the 45-minute discovery call, ranked opportunity plan, verified tool costs, and four-day starting plan.
+- [Intelligent AI Voice Agents](https://www.sarranai.com/ai-voice-agents.html): Covers inbound answering, caller qualification, calendar booking, approved outbound follow-up, transcripts, and reporting.
+- [AI-Integrated Web Development](https://www.sarranai.com/ai-web-development.html): Describes performance-focused websites with targeted AI qualification, routing, and answer capabilities.
+- [Workflow and Task Automation](https://www.sarranai.com/workflow-automation.html): Covers scheduled and event-triggered automation for intake, data movement, reporting, invoicing, and follow-up.
 
 ## Process and Standards
 
-- [Assessment Process](https://sarranai.com/#how): Describes discovery, analysis, the written plan, and the final walkthrough completed in about one week.
-- [Production and Governance Controls](https://sarranai.com/#trust): Explains human approval gates, least-privilege tool access, data minimization, logging, and production cost controls.
-- [Frequently Asked Questions](https://sarranai.com/#faq): Provides direct answers about assessments, voice-agent capabilities, delivery time, service area, and sensitive actions.
+- [Assessment Process](https://www.sarranai.com/#how): Describes discovery, analysis, the written plan, and the final walkthrough completed in about one week.
+- [Production and Governance Controls](https://www.sarranai.com/#trust): Explains human approval gates, least-privilege tool access, data minimization, logging, and production cost controls.
+- [Frequently Asked Questions](https://www.sarranai.com/#faq): Provides direct answers about assessments, voice-agent capabilities, delivery time, service area, and sensitive actions.
 
 ## Company
 
-- [About Sarran AI Solutions](https://sarranai.com/#about): Covers the Orlando practice, founder Robert Gangasarran, regulated-financial-services experience, and delivery record.
-- [Request an AI Readiness Assessment](https://sarranai.com/#book): Provides the assessment request form and alternative email contact.
+- [About Sarran AI Solutions](https://www.sarranai.com/#about): Covers the Orlando practice, founder Robert Gangasarran, regulated-financial-services experience, and delivery record.
+- [Request an AI Readiness Assessment](https://www.sarranai.com/#book): Provides the assessment request form and alternative email contact.
 
 ## Legal
 
-- [Privacy Policy](https://sarranai.com/privacy.html): Explains information collection, FormSubmit processing, retention, security, individual choices, and contact options.
+- [Privacy Policy](https://www.sarranai.com/privacy.html): Explains information collection, FormSubmit processing, retention, security, individual choices, and contact options.
 
 ## Key Facts
 
@@ -35,7 +35,7 @@
 
 ## Contact
 
-- Website: https://sarranai.com/
+- Website: https://www.sarranai.com/
 - Email: robertgangasarran@gmail.com
 - Phone: +1-407-230-8598
 - LinkedIn: https://www.linkedin.com/in/robertgangasarran
