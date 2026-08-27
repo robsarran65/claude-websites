@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360">
+  <g transform="translate(160,6)"><defs>
+    <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14908C"/><stop offset="1" stop-color="#0A5F5D"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="188" height="188" rx="46" fill="url(#tg)"/>
+  <text x="98" y="150" font-family="Poppins" font-weight="700" font-size="150" fill="#FFFFFF" text-anchor="middle">S</text>
+  <g stroke="#E23B3B" stroke-width="3.4" opacity="1">
+    <line x1="150" y1="44" x2="168" y2="44"/><line x1="159" y1="35" x2="159" y2="53"/>
+    <line x1="150.7" y1="35.7" x2="167.3" y2="52.3"/><line x1="167.3" y1="35.7" x2="150.7" y2="52.3"/>
+  </g>
+  <circle cx="159" cy="44" r="5.8" fill="#E23B3B"/></g>
+  <text x="260" y="270" font-family="Poppins" font-weight="700" font-size="66" letter-spacing="1" fill="#24302E" text-anchor="middle">SARRAN</text>
+  <text x="262" y="312" font-family="Poppins" font-weight="600" font-size="23" letter-spacing="8.5" fill="#0E7C7B" text-anchor="middle">AI SOLUTIONS</text>
+</svg>

@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+
+# AI search and user-requested retrieval
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Aggressive crawler with limited relevance to this US service business
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://sarranai.com/sitemap.xml
