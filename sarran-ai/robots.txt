@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 
+# Machine-readable usage preferences (contentsignals.org draft): permits this
+# content to be used for search indexing, AI retrieval/input, and AI training.
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
 # AI search and user-requested retrieval
 User-agent: OAI-SearchBot
 Allow: /

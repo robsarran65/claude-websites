@@ -809,6 +809,9 @@ a { color: inherit; text-decoration: none; }
   color: var(--faint);
 }
 .foot__loc { color: var(--faint); }
+.foot__base-links { display: flex; gap: 1.25rem; }
+.foot__base-links a { color: var(--faint); transition: color .18s ease; }
+.foot__base-links a:hover { color: var(--accent); }
 
 /* --- Scroll reveal ------------------------------------------------------- */
 [data-reveal] { opacity: 0; transform: translateY(18px); }

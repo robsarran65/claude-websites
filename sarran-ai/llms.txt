@@ -8,6 +8,7 @@
 - [Intelligent AI Voice Agents](https://www.sarranai.com/ai-voice-agents.html): Covers inbound answering, caller qualification, calendar booking, approved outbound follow-up, transcripts, and reporting.
 - [AI-Integrated Web Development](https://www.sarranai.com/ai-web-development.html): Describes performance-focused websites with targeted AI qualification, routing, and answer capabilities.
 - [Workflow and Task Automation](https://www.sarranai.com/workflow-automation.html): Covers scheduled and event-triggered automation for intake, data movement, reporting, invoicing, and follow-up.
+- [AI Answering Service for Dental Practices](https://www.sarranai.com/ai-voice-agent-dental-practices.html): Covers after-hours emergency triage, appointment booking, insurance-question routing, and missed-call recovery for dental offices.
 
 ## Process and Standards
 
@@ -17,12 +18,17 @@
 
 ## Company
 
-- [About Sarran AI Solutions](https://www.sarranai.com/#about): Covers the Orlando practice, founder Robert Gangasarran, regulated-financial-services experience, and delivery record.
+- [About Sarran AI Solutions](https://www.sarranai.com/about.html): Covers the Orlando practice, founder Robert Gangasarran, regulated-financial-services experience, and full delivery track record.
 - [Request an AI Readiness Assessment](https://www.sarranai.com/#book): Provides the assessment request form and alternative email contact.
 
 ## Legal
 
 - [Privacy Policy](https://www.sarranai.com/privacy.html): Explains information collection, FormSubmit processing, retention, security, individual choices, and contact options.
+- [Terms of Service](https://www.sarranai.com/terms.html): Explains scope of services, payment terms, intellectual property, liability, and governing law.
+
+## Full-Text Content
+
+- [Full page content](https://www.sarranai.com/llms-full.txt): Complete, unabridged text of every page on the site, for tools that prefer full content over curated summaries.
 
 ## Key Facts
 
