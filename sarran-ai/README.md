@@ -14,7 +14,7 @@ built around one signature element: a live after-hours call log in the hero.
 | `privacy.html` | Privacy notice linked from the booking form and footer |
 | `robots.txt` / `sitemap.xml` | Production crawler guidance and canonical URL discovery |
 | `llms.txt` | Concise public business and service summary for compatible AI retrieval tools |
-| `_headers` | Netlify-style security and cache headers; translate these rules for other hosts |
+| `vercel.json` | Security and cache headers (Vercel reads this, not a `_headers` file — translate for other hosts) |
 
 Open `index.html` directly, or serve: `python -m http.server 8000`.
 
@@ -95,8 +95,13 @@ was raised from 48→58px and the bar from 72→86px in the same pass, because a
 original 72px bar reads as cramped rather than confident. Everything geared off `--bar`
 (`scroll-padding-top`, the hero's top padding) follows automatically.
 
-The previous teal lockups (`Sarran_AI_logo_*.svg`, `Sarran_AI_icon.svg`) are still in `assets/`
-but no longer referenced. Left in place in case you want the horizontal lockup later.
+The previous teal lockups (`Sarran_AI_logo_*.svg`, `Sarran_AI_icon.svg`) were unreferenced and have
+been deleted (recoverable from git history if needed).
+
+> Note: this whole Logo section documents the cyan-emblem branding (`sarran_emblem.png`), which
+> predates the current robot-logo branding (`sarran-ai-robot-icon.png`, `sarran-ai-robot-logo.png`).
+> The emblem PNGs were also unreferenced and have been deleted; this section is left as historical
+> design-decision context but is no longer an accurate description of the current logo.
 
 ## Booking form
 

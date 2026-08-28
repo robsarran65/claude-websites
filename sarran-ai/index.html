@@ -571,7 +571,15 @@
          email from FormSubmit — click the link in it to activate the endpoint.
          Until activated, submissions are NOT delivered.
          The non-AJAX `action` below is the no-JavaScript fallback; main.js
-         posts to the /ajax/ variant so the visitor stays on the page. -->
+         posts to the /ajax/ variant so the visitor stays on the page.
+
+         TODO (email exposure): the /robertgangasarran@gmail.com path below puts
+         the raw address in page source, where scrapers harvest it for spam
+         outside this form entirely. After activation, FormSubmit's confirmation
+         email includes a random alias token — replace BOTH the `action` and
+         `data-endpoint` paths below with
+         https://formsubmit.co/<token> and https://formsubmit.co/ajax/<token>
+         once you have it. -->
     <div class="book__panel" id="book-form">
       <form class="bform" method="post"
             action="https://formsubmit.co/robertgangasarran@gmail.com"
