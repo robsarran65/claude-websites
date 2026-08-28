@@ -476,11 +476,149 @@ AI readiness assessment · AI voice agents · AI-integrated web development · S
 
 ---
 
+# About Sarran AI Solutions
+
+Source: https://www.sarranai.com/about.html
+Title: About | Sarran AI Solutions
+
+> Twenty years of delivery leadership in regulated financial services, now built into an AI enablement practice with a satellite office in Orlando, FL for owner-led businesses.
+
+## Built by someone who has shipped this inside regulated banks.
+
+About Sarran AI Solutions
+
+Sarran AI Solutions LLC is an AI enablement and consulting practice. We help owner-led businesses find where AI genuinely saves time, then build the systems that deliver it — without the overhead of hiring a team to do it in-house.
+
+## Two decades of delivery leadership inside
+
+- American Express
+- Fiserv
+- Wells Fargo
+- BNY Mellon
+- FINRA
+
+Founder's career history in regulated financial services — not a client list.
+
+## From regulated banking to AI enablement
+
+Founder Robert Gangasarran spent twenty years leading delivery across American Express, Fiserv, Wells Fargo, BNY Mellon, and FINRA — environments where reliability, governance, and cost discipline were never optional. That is the same standard this practice holds itself to.
+
+Sarran AI Solutions LLC exists to bring that same discipline to owner-led businesses that want the benefits of AI — voice agents, workflow automation, AI-integrated websites, and readiness planning — without hiring an internal team to build and govern it themselves.
+
+## Track record
+
+Two decades of delivery leadership, in numbers:
+
+- 46% → 84%: Release train predictability lifted across a large delivery organisation, clearing an 80% annual target two increments early
+- 100: Scrum Masters hired, onboarded, and scaled to carry an enterprise-wide agile transformation
+- <0.03%: Defects reaching production — the result of a scriptless test automation framework built from scratch, letting testers author and maintain coverage without writing code
+- 35: Engineers in test led directly, building quality-engineering and automation capability from the ground up
+- 0 → 1: Enterprise AI strategy authored from nothing and presented to Director- and VP-level stakeholders
+- 20+ yrs: Delivery leadership across regulated financial services, where governance and cost discipline are not optional
+
+## How that experience shows up in this work
+
+Most AI pilots stall on the same four things: tools called without boundaries, high-impact actions with no approval gate, evaluation that only grades the final answer, and cost that looks fine in a demo and breaks at volume. Sarran AI Solutions designs for all four before writing anything — the same production discipline behind the track record above.
+
+- A person confirms anything that matters — payments, refunds, cancellations, data changes
+- Every tool is scoped to least-privilege access and logged
+- Only the data a given step needs is used, with policy-driven retention
+- Cost is designed in at production volume, not discovered after launch
+
+## What Sarran AI Solutions builds
+
+The practice offers four ways to take repetitive work off a growing business: an entry-point assessment for businesses that don't yet know where to start, and three implementation services for those who do.
+
+- AI Assessments & Strategy — a 45-minute discovery call and a ranked, written plan
+- Intelligent AI Voice Agents — 24/7 call answering, qualification, and booking
+- Next-Gen Web Design & Development — performance-focused sites with AI where it earns its place
+- Workflow & Task Automation — back-office automation that escalates exceptions to a person
+
+## Start with a 45-minute call.
+
+Book an AI Readiness Assessment directly with Robert — no account team, no handoff. You leave with a ranked plan whether or not you hire us.
+
+## Explore the practice
+
+AI readiness assessment · AI voice agents · AI-integrated web development · Workflow automation · Sarran AI Solutions home
+
+© 2026 Sarran AI Solutions LLC.
+
+---
+
+# AI Answering Service for Dental Practices
+
+Source: https://www.sarranai.com/ai-voice-agent-dental-practices.html
+Title: AI Answering Service for Dental Practices | Sarran AI Orlando
+
+> Never miss a patient call. AI answering service for dental practices: emergency triage, booking, insurance-question routing, and after-hours coverage.
+
+## Never miss another patient call.
+
+AI answering service for dental practices · Orlando and nationwide
+
+An AI voice agent built around a dental front desk: it answers after-hours emergencies, books and reschedules appointments, triages insurance questions, and calls back the patients who couldn't get through.
+
+**Service facts:**
+
+- 24/7 coverage — After-hours and overflow patient calls
+- Emergency triage — Flags urgent cases for a defined callback
+- Missed-call recovery — Calls back instead of going to voicemail
+
+## What an AI answering service handles for a dental office
+
+A front desk is often unavailable exactly when the phone rings: mid-procedure, at lunch, or after closing. The agent is built around a documented call flow for your practice, not an open-ended promise to handle every conversation.
+
+- Answer inbound calls during business hours and after hours
+- Triage dental emergencies against criteria you define
+- Book, confirm, and reschedule appointments
+- Route insurance and billing questions it isn't authorized to answer
+- Call back missed calls and voicemails instead of leaving them unanswered
+- Collect new-patient intake details and hand off a structured summary to staff
+
+## How production controls work for a dental practice
+
+Before launch, we define what the agent may say about clinical topics, insurance coverage, and pricing, which systems it may access, and where it must stop. Anything resembling a dental emergency — severe pain, swelling, trauma, uncontrolled bleeding — follows an escalation path you approve, not a scripted guess.
+
+## Why this matters for dental practices specifically
+
+Two of the highest-value calls a practice can lose are the after-hours emergency and the new patient who hangs up rather than leaving a voicemail. This is the same call-handling problem we use as our own example of what a voice agent can do — we hear it constantly from dental offices exploring AI.
+
+## AI answering service for dental offices — questions
+
+**Can it handle emergency triage vs. routine scheduling?**
+Yes. Before launch we define what counts as a dental emergency for your practice — for example severe pain, swelling, trauma, or uncontrolled bleeding — and route those calls immediately per your escalation protocol, while routine scheduling, rescheduling, and confirmations are handled by the agent directly.
+
+**Does it integrate with our practice management or scheduling system?**
+Yes, when your system exposes a suitable integration. Booking rules, available slots, and required fields are documented first. Where an integration isn't available, the agent captures a structured message and a team member confirms the appointment.
+
+**What happens with insurance questions it can't answer?**
+The agent does not guess about coverage, benefits, or claims. It collects the caller's insurance details and question, then routes the call to staff or schedules a callback, based on rules you approve in advance.
+
+**Will patients know they're speaking with AI?**
+The call opening and disclosure approach is defined with your practice according to your preferences and applicable requirements. We favor clear, honest experiences.
+
+**Can it recover calls we miss?**
+Yes. When a call goes unanswered or a voicemail is left, the agent can call back, capture the reason for the call, and either book the appointment directly or hand a structured summary to staff.
+
+## Start with your after-hours line.
+
+Bring the call your practice misses most — after-hours emergencies, lunch coverage, or the calls that go to voicemail. We will map the triage rules, booking flow, and escalation path.
+
+## Related AI services
+
+AI voice agents · AI readiness assessment · Workflow automation · Sarran AI Solutions home
+
+© 2026 Sarran AI Solutions LLC.
+
+---
+
 # Company Reference
 
 - Official name: Sarran AI Solutions LLC
 - Founder: Robert Gangasarran
-- Location: Orlando, Florida, United States
+- Registered address: 41 SE 5th Street, Suite 1616, Miami, FL 33131
+- Satellite office: Orlando, Florida
 - Service area: United States
 - Primary services: AI readiness assessments, AI voice agents, workflow automation, and AI-integrated web development
 - Website: https://www.sarranai.com/
