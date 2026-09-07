@@ -1,10 +1,10 @@
 # Sarran AI Solutions LLC
 
-> Orlando-based AI consulting practice building practical voice agents, workflow automation, AI readiness plans, and AI-integrated websites for US businesses.
+> Orlando and Miami AI consulting practice helping small businesses, clinics, and service providers find and automate repetitive work.
 
 ## Services
 
-- [AI Assessments and Strategy](https://www.sarranai.com/ai-readiness-assessment.html): Explains the 45-minute discovery call, ranked opportunity plan, verified tool costs, and four-day starting plan.
+- [AI Time Savings Assessment](https://www.sarranai.com/ai-readiness-assessment.html): A $250 assessment with a 45-minute working session, ranked opportunity plan, expected tool costs, and practical next steps.
 - [Intelligent AI Voice Agents](https://www.sarranai.com/ai-voice-agents.html): Covers inbound answering, caller qualification, calendar booking, approved outbound follow-up, transcripts, and reporting.
 - [AI-Integrated Web Development](https://www.sarranai.com/ai-web-development.html): Describes performance-focused websites with targeted AI qualification, routing, and answer capabilities.
 - [Workflow and Task Automation](https://www.sarranai.com/workflow-automation.html): Covers scheduled and event-triggered automation for intake, data movement, reporting, invoicing, and follow-up.
@@ -18,8 +18,9 @@
 
 ## Company
 
-- [About Sarran AI Solutions](https://www.sarranai.com/about.html): Covers the Orlando practice, founder Robert Gangasarran, regulated-financial-services experience, and full delivery track record.
-- [Request an AI Readiness Assessment](https://www.sarranai.com/#book): Provides the assessment request form and alternative email contact.
+- [About Sarran AI Solutions](https://www.sarranai.com/about.html): Covers the Orlando and Miami practice, founder Robert Gangasarran, regulated-financial-services experience, and full delivery track record.
+- [Request an AI Time Savings Assessment](https://www.sarranai.com/#book): Provides the simple contact form and alternative email contact.
+- [Free Time Savings Guide](https://www.sarranai.com/small-business-time-savings-guide.html): Seven common places small businesses lose time and how AI or automation can help.
 
 ## Legal
 
@@ -34,14 +35,14 @@
 
 - Official name: Sarran AI Solutions LLC
 - Founder: Robert Gangasarran
-- Location: Orlando, Florida, United States
+- Locations: Orlando and Miami, Florida, United States
 - Service area: United States
 - Primary services: AI readiness assessments, AI voice agents, workflow automation, and AI-integrated web development
-- Assessment format: 45-minute discovery call followed by a written, ranked plan
+- Assessment price and format: $250; 45-minute working session followed by a written, ranked plan
 
 ## Contact
 
 - Website: https://www.sarranai.com/
-- Email: robertgangasarran@gmail.com
+- Email: robert@sarranai.com
 - Phone: +1-407-230-8598
 - LinkedIn: https://www.linkedin.com/in/robertgangasarran

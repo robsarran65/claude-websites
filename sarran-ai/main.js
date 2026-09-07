@@ -128,7 +128,7 @@
 
   /* --- Scroll reveal ---------------------------------------------------- */
   var targets = document.querySelectorAll(
-    '.lede, .offer, .phase, .rule, .faq__item, .record__row, .about__copy, .book__inner, .pedigree__inner'
+    '.lede, .assessment-card, .sample-plan, .who-card, .offer, .phase, .rule, .faq__item, .record__row, .about__copy, .guide__inner, .book__inner, .pedigree__inner'
   );
 
   if (targets.length && !calm && 'IntersectionObserver' in window) {
@@ -155,6 +155,9 @@
   if (panel && form) {
     var status = form.querySelector('.bform__status');
     var toggles = document.querySelectorAll('[data-book-toggle]');
+    var guideRequests = document.querySelectorAll('[data-guide-request]');
+    var assessmentRequests = document.querySelectorAll('a[href="#book"]:not([data-guide-request]), [data-book-toggle]');
+    var interestField = form.querySelector('[data-interest-field]');
     // every "Book" link elsewhere on the page also opens the panel
     var openers = document.querySelectorAll('a[href="#book"]');
 
@@ -193,6 +196,31 @@
     Array.prototype.forEach.call(openers, function (a) {
       // let the anchor scroll to #book as normal, then reveal the form
       a.addEventListener('click', function () { openPanel(false); });
+    });
+
+    Array.prototype.forEach.call(guideRequests, function (a) {
+      a.addEventListener('click', function () {
+        if (interestField) interestField.value = 'Free time savings guide';
+        openPanel(false);
+        var title = form.querySelector('.bform__title');
+        var intro = form.querySelector('.bform__intro');
+        var submit = form.querySelector('button[type="submit"]');
+        if (title) title.textContent = 'Where should we send your guide?';
+        if (intro) intro.textContent = 'Enter your details and the guide will be ready immediately.';
+        if (submit) submit.textContent = 'Get the Free Guide';
+      });
+    });
+
+    Array.prototype.forEach.call(assessmentRequests, function (a) {
+      a.addEventListener('click', function () {
+        if (interestField) interestField.value = 'AI Time Savings Assessment';
+        var title = form.querySelector('.bform__title');
+        var intro = form.querySelector('.bform__intro');
+        var submit = form.querySelector('button[type="submit"]');
+        if (title) title.textContent = 'Tell us where you are losing time';
+        if (intro) intro.textContent = 'Four quick fields. Robert replies within one business day.';
+        if (submit) submit.textContent = 'Find My Time Savings';
+      });
     });
 
     /* Validation. Native constraints do the checking; we render the messages
@@ -267,10 +295,10 @@
 
         status.innerHTML = needsActivation
           ? 'This form still needs to be activated for this website. Check ' +
-            '<a href="mailto:robertgangasarran@gmail.com">robertgangasarran@gmail.com</a> ' +
+            '<a href="mailto:robert@sarranai.com">robert@sarranai.com</a> ' +
             '(including Spam) for the FormSubmit activation email, click its link, then submit again.'
           : 'That did not send. Please email ' +
-            '<a href="mailto:robertgangasarran@gmail.com">robertgangasarran@gmail.com</a> ' +
+            '<a href="mailto:robert@sarranai.com">robert@sarranai.com</a> ' +
             'and we will pick it up from there.';
         status.setAttribute('data-state', 'error');
         // surface the relay's own reason in the console for diagnosis —
@@ -299,10 +327,13 @@
         // `success` in the body, and it arrives as the string "true"/"false".
         var delivered = data && (data.success === true || data.success === 'true');
         if (!delivered) throw new Error((data && data.message) || 'Submission rejected');
+        var requestedGuide = interestField && interestField.value === 'Free time savings guide';
         form.reset();
         submitBtn.disabled = false;
         form.removeAttribute('aria-busy');
-        status.textContent = 'Thanks — your request is in. We reply within one business day.';
+        status.innerHTML = requestedGuide
+          ? 'Thanks — <a href="small-business-time-savings-guide.html">open your free guide now</a>.'
+          : 'Thanks — your request is in. Robert will reply within one business day.';
         status.setAttribute('data-state', 'ok');
       }).catch(failed);
     });

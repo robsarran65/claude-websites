@@ -1,7 +1,7 @@
 # Sarran AI Solutions LLC — website
 
-Dark, enterprise-futurist single page. Blue palette, Archivo / Public Sans / IBM Plex Mono,
-built around one signature element: a live after-hours call log in the hero.
+Dark, conversion-focused marketing site. Blue palette, Archivo / Public Sans / IBM Plex Mono,
+built around the $250 AI Time Savings Assessment for small businesses, clinics, and service providers.
 
 ## Files
 
@@ -9,7 +9,8 @@ built around one signature element: a live after-hours call log in the hero.
 | --- | --- |
 | `index.html` | All structure and copy, one commented block per section |
 | `styles.css` | Tokens + layout. **All colour lives in the `:root` block** — a hue change is one edit there |
-| `main.js` | Drawer, masthead tuck, call-log playback, scroll reveal, footer year |
+| `main.js` | Drawer, masthead tuck, scroll reveal, form flow, guide request, footer year |
+| `small-business-time-savings-guide.html` | Free “7 Places Small Businesses Lose Time” lead magnet |
 | `assets/` | Brand logos and icon from `06_Brand_Assets/` |
 | `privacy.html` | Privacy notice linked from the booking form and footer |
 | `robots.txt` / `sitemap.xml` | Production crawler guidance and canonical URL discovery |
@@ -20,9 +21,9 @@ Open `index.html` directly, or serve: `python -m http.server 8000`.
 
 ## Section order
 
-Header · **Hero** (headline + call log) · Founder pedigree strip · **Services** (4) ·
+Header · **Hero** (headline + $250 assessment) · Founder pedigree strip · **Who we help** · **Solutions** (4) ·
 **How it works** (4 phases) · **Why it holds up** (production/governance) ·
-FAQ · About · Booking · Footer
+FAQ · Meet Robert · Free guide · Contact form · Footer
 
 ## Design decisions
 
@@ -41,18 +42,15 @@ enterprise. Used instead:
 The logo lockup keeps Poppins internally, since it's a fixed SVG. Reverting to Poppins is a
 one-line change to `--display`.
 
-**Signature element.** The hero leads with a working artifact instead of a headline-and-gradient:
-a timestamped 2:47 AM inbound call that ends in a confirmed booking. The product is invisible —
-a voice on a phone — so showing it beats asserting it. It plays once on first view.
+**Primary offer.** The first viewport pairs the time-savings message with a concrete $250
+assessment card, deliverables, and a single “Find My Time Savings” action.
 
 **Numbering.** Only the process is numbered, because only the process is genuinely a sequence.
 Service cards carry a role label (`Entry point`, `Always on`, `Front door`, `Back office`) rather
 than decorative 01/02/03.
 
-**Motion.** Two composed moments that bookend the page — the hero call log, and the closing
-headline typing itself out — plus quiet scroll reveals and hover states. Both read as a machine
-composing text, which is why the second one earns its place rather than being a stray effect.
-No cursor-tracked effects anywhere, per your original instruction. `prefers-reduced-motion` is
+**Motion.** The closing headline types itself out, supported by quiet scroll reveals and hover
+states. No cursor-tracked effects anywhere, per your original instruction. `prefers-reduced-motion` is
 honoured, and nothing is hidden until JS arms it — with JS off the page renders complete.
 
 **Typewriter mechanics** (`.tw` in `styles.css`, `[data-typewriter]` in `main.js`). Two spans sit
@@ -105,12 +103,12 @@ been deleted (recoverable from git history if needed).
 
 ## Booking form
 
-Every "Book" button on the page opens the same panel at `#book` — header, mobile drawer, hero,
+Every primary action opens the same panel at `#book` — header, mobile drawer, hero,
 trust section, and the panel's own toggle. It is rendered open in the HTML and collapsed by
 `main.js` on load, so with JavaScript disabled the form is still visible and posts natively.
 
 **Delivery: FormSubmit.** A static page cannot send mail, so the form posts to
-`formsubmit.co`, which relays to `robertgangasarran@gmail.com`. No account — the endpoint is the
+`formsubmit.co`, which relays to `robert@sarranai.com`. No account — the endpoint is the
 address. `main.js` posts to the `/ajax/` variant so the visitor stays on the page; the plain
 `action` on the `<form>` is the no-JavaScript fallback.
 
@@ -141,7 +139,7 @@ referrer policy omits the full form URL.
 - [ ] **Owner required:** activate the final HTTPS production origin. Submit once from the live
       site, open the FormSubmit activation email (including Spam), and click its activation link.
 - [ ] **Owner required:** after activation, make a second controlled submission from the live site
-      and confirm the complete message arrives in `robertgangasarran@gmail.com`. A successful UI
+      and confirm the complete message arrives in `robert@sarranai.com`. A successful UI
       message alone is not sufficient evidence of inbox delivery.
 - [x] Set `_subject` to the production site name (`sarranai.com`).
 - [x] Publish and link the privacy notice from the form and footer.
@@ -154,6 +152,9 @@ would need a JSON response to match the contract `main.js` expects.
 
 ## Open items before launch
 
+- [ ] **Owner required:** test the configured Stripe sandbox checkout using
+      `STRIPE-INTEGRATION-PLAN.md`, complete Stripe live-account onboarding, and create the
+      live-mode equivalent before adding a public payment link.
 - [ ] Voice-agent and web-development service copy is written from your brief, not from existing
       case material — review for accuracy before publishing.
 - [ ] Confirm the LinkedIn URL and phone number.
@@ -164,13 +165,14 @@ would need a JSON response to match the contract `main.js` expects.
 - [x] Publish `llms.txt` as a supplementary machine-readable business summary.
 - [ ] Verify the production property in Google Search Console and Bing Webmaster Tools, submit the
       sitemap, and request initial indexing after deployment.
-- [ ] Create or verify the Google Business Profile and keep the business name, Orlando location,
+- [ ] Create or verify the Google Business Profile and keep the business name, Orlando and Miami locations,
       phone number, website, and service descriptions consistent with this site.
 - [ ] Confirm the production host applies `_headers` (or equivalent host configuration) and inspect
       the deployed response headers. Python's local development server does not apply this file.
 
-## Verified
+## Verification
 
-Rendered headless at 1440px and at a true 390px viewport (via fixed-width iframe — Chrome on
-Windows enforces a ~500px minimum window, so a plain `--window-size=390` screenshot crops rather
-than reflows). No horizontal overflow at either width: `scrollWidth === clientWidth`.
+The current conversion update passes JavaScript syntax checks, balanced HTML container checks,
+JSON-LD parsing, local route and asset checks, and HTTP serving checks for the homepage, assessment
+page, guide, stylesheet, and interaction script. Recheck the deployed site at desktop and mobile
+widths before publishing broadly.
