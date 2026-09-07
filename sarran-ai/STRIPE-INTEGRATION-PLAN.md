@@ -17,6 +17,11 @@ receipts, payment-method display, and checkout security.
 - Stripe creates a Customer and a paid invoice for the completed one-time purchase
 - The hosted confirmation tells the customer Robert will contact them within one business day
 
+### Production checkout
+
+- Payment Link: `https://buy.stripe.com/9B68wRdCX3O34ocaxL7N601`
+- Verified as a live checkout for Sarran AI Solutions LLC, showing the $250 AI Time Savings Assessment.
+
 ### Sandbox objects
 
 - Product: `prod_VDGze1QgJjgDyB`

@@ -152,9 +152,9 @@ would need a JSON response to match the contract `main.js` expects.
 
 ## Open items before launch
 
-- [ ] **Owner required:** test the configured Stripe sandbox checkout using
-      `STRIPE-INTEGRATION-PLAN.md`, complete Stripe live-account onboarding, and create the
-      live-mode equivalent before adding a public payment link.
+- [x] Create and verify the live Stripe Payment Link for the AI Time Savings Assessment.
+- [ ] **Owner required:** test the live checkout with a real or authorized payment method before
+      promoting it broadly; confirm the receipt and Stripe Dashboard payment record.
 - [ ] Voice-agent and web-development service copy is written from your brief, not from existing
       case material — review for accuracy before publishing.
 - [ ] Confirm the LinkedIn URL and phone number.
