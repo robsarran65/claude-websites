@@ -15,18 +15,20 @@
   var chatForm = document.querySelector('.chat-form');
   var chatInput = document.getElementById('chat-input');
   var chatMessages = document.querySelector('.chat-panel__messages');
+  var chatBook = document.querySelector('[data-chat-book]');
   if (chatLauncher && chatPanel && chatForm && chatInput && chatMessages) {
     var setChatOpen = function (open) { chatPanel.hidden = !open; chatLauncher.setAttribute('aria-expanded', String(open)); if (open) chatInput.focus(); };
     var appendChatMessage = function (text, kind) { var message = document.createElement('p'); message.className = 'chat-message chat-message--' + kind; message.textContent = text; chatMessages.appendChild(message); chatMessages.scrollTop = chatMessages.scrollHeight; };
     var answerChatQuestion = function (question) {
       var normalized = question.toLowerCase();
-      if (normalized.includes('assessment') || normalized.includes('250')) return 'The AI Time Savings Assessment is a $250 one-time service with a 45-minute working session, 3–7 ranked opportunities, and a written action plan. Request it below or pay securely after fit is confirmed.';
-      if (normalized.includes('book') || normalized.includes('consult') || normalized.includes('schedule')) return 'Use Find My Time Savings below to tell Robert what is slowing you down. He replies within one business day and can help schedule the right next step.';
+      if (normalized.includes('assessment') || normalized.includes('250')) return 'The AI Time Savings Assessment is a $250 one-time service with a 45-minute working session, 3–7 ranked opportunities, and a written action plan. Use Start $250 assessment below. Payment is only considered verified after Stripe confirms the checkout; a button click alone is not proof of payment.';
+      if (normalized.includes('book') || normalized.includes('consult') || normalized.includes('schedule')) return 'Choose Book 30 min with Robert below for a consultation. The form captures the problem first, and Robert replies within one business day.';
       if (normalized.includes('voice') || normalized.includes('call')) return 'Sarran AI builds voice agents that answer approved questions, qualify callers, schedule appointments, and hand off to a person when needed.';
       return 'Sarran AI helps small businesses, clinics, and service providers find repetitive work worth automating. Ask about the assessment, voice agents, workflow automation, or web development.';
     };
     chatLauncher.addEventListener('click', function () { setChatOpen(chatPanel.hidden); });
     if (chatClose) chatClose.addEventListener('click', function () { setChatOpen(false); chatLauncher.focus(); });
+    if (chatBook) chatBook.addEventListener('click', function () { setChatOpen(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !chatPanel.hidden) { setChatOpen(false); chatLauncher.focus(); } });
     Array.prototype.forEach.call(document.querySelectorAll('[data-chat-question]'), function (button) { button.addEventListener('click', function () { var question = button.getAttribute('data-chat-question'); appendChatMessage(question, 'user'); appendChatMessage(answerChatQuestion(question), 'agent'); }); });
     chatForm.addEventListener('submit', function (e) { e.preventDefault(); var question = chatInput.value.trim(); if (!question) return; appendChatMessage(question, 'user'); appendChatMessage(answerChatQuestion(question), 'agent'); chatInput.value = ''; });

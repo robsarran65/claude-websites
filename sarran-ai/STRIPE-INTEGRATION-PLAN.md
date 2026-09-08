@@ -21,6 +21,8 @@ receipts, payment-method display, and checkout security.
 
 - Payment Link: `https://buy.stripe.com/9B68wRdCX3O34ocaxL7N601`
 - Verified as a live checkout for Sarran AI Solutions LLC, showing the $250 AI Time Savings Assessment.
+- The website chatbot may open this link, but must not treat a click, return visit, or user claim as payment verification.
+- Verified payment requires a Stripe webhook or authenticated Dashboard/API check keyed to the Checkout Session or payment record.
 
 ### Sandbox objects
 
