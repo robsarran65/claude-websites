@@ -1,0 +1,12 @@
+livekit-agents
+livekit-plugins-google
+livekit-plugins-noise-cancellation
+mem0ai
+duckduckgo-search
+requests
+python-dotenv
+numpy<2.5
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+tzdata
