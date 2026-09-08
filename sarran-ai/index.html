@@ -115,7 +115,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=chat-2">
 </head>
 <body>
 
@@ -741,6 +741,34 @@
   </div>
 </footer>
 
-<script src="main.js" defer></script>
+<aside class="chat-widget" aria-label="Ask Sarran AI">
+  <section class="chat-panel" id="chat-panel" hidden aria-labelledby="chat-title">
+    <header class="chat-panel__head">
+      <div class="chat-panel__identity">
+        <img src="assets/sarran-ai-robot-icon.png" alt="" width="48" height="48">
+        <div><h2 id="chat-title">Ask Sarran AI</h2><p>Website assistant</p></div>
+      </div>
+      <button class="chat-panel__close" type="button" aria-label="Close Ask Sarran AI">×</button>
+    </header>
+    <div class="chat-panel__messages" aria-live="polite">
+      <p class="chat-message chat-message--agent">Hi, I’m Sarran AI. Ask me about our services, the $250 assessment, or booking a consultation.</p>
+    </div>
+    <div class="chat-panel__suggestions" aria-label="Suggested questions">
+      <button type="button" data-chat-question="What does Sarran AI do?">What do you do?</button>
+      <button type="button" data-chat-question="What is the AI Time Savings Assessment?">What is the assessment?</button>
+      <button type="button" data-chat-question="How do I book a consultation?">Book a consultation</button>
+    </div>
+    <form class="chat-form">
+      <label class="visually-hidden" for="chat-input">Ask Sarran AI a question</label>
+      <input id="chat-input" name="question" type="text" autocomplete="off" placeholder="Ask a question...">
+      <button class="chat-form__send" type="submit" aria-label="Send question">Send</button>
+    </form>
+  </section>
+  <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel">
+    <img src="assets/sarran-ai-robot-icon.png" alt="" width="44" height="44"><span>Ask Sarran AI</span>
+  </button>
+</aside>
+
+<script src="main.js?v=chat-1" defer></script>
 </body>
 </html>
