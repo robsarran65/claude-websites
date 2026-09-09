@@ -1,3 +1,11 @@
+# Nothing here is part of the deployed site.
+#
+# vercel.json caches /assets/* for a year as immutable, so anything that lands
+# there is effectively permanent - keep source masters out entirely.
+assets/source/
+
+# Planning and internal notes. Glob rather than named files so the next
+# strategy doc is covered without anyone remembering to add it.
+*.md
 docs/
 scripts/
-README.md

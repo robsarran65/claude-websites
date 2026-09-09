@@ -176,12 +176,12 @@ a { color: inherit; text-decoration: none; }
 .brandmark { display: inline-flex; align-items: center; flex: 0 0 auto; }
 
 .brandmark__logo {
-  width: clamp(11rem, 17vw, 13rem);
+  width: clamp(12.5rem, 18.5vw, 14.5rem);
   height: auto;
   flex: 0 0 auto;
 }
 
-.brandmark--lg .brandmark__logo { width: min(100%, 15rem); }
+.brandmark--lg .brandmark__logo { width: min(100%, 17.5rem); }
 
 .masthead__nav {
   display: flex;
@@ -393,7 +393,9 @@ a { color: inherit; text-decoration: none; }
 .pedigree__list {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 2.75rem;
+  /* Twelve names now, so the column gap has to give way on narrow screens
+     or the strip runs to six rows. Wide stays at the original 2.75rem. */
+  gap: .85rem clamp(1.5rem, 3.2vw, 2.75rem);
   font-family: var(--display);
   font-weight: 700;
   font-stretch: 108%;
@@ -402,6 +404,188 @@ a { color: inherit; text-decoration: none; }
   opacity: .82;
 }
 .pedigree__fine { margin-top: 1rem; font-size: .8rem; color: var(--faint); }
+
+/* --- Case studies (results) ---------------------------------------------- */
+/* The page's proof, between the pedigree strip and the assessment sample.
+   Every value is derived from the tokens above; no new colour is introduced.
+
+   Scannability: the three body paragraphs each carry a run-in label drawn with
+   generated content ("The problem" / "What we built" / "Result") plus a left
+   rule, so the three roles read at a glance without the prose. The labels are
+   block-level and sit at the head of the paragraph they name, so where a
+   screen reader announces generated content it lands as a short phrase ahead
+   of that sentence — the same word, in the same order, a sighted reader sees.
+
+   Result is the payload of every card: accent rule, tinted panel, display
+   face. It outranks the title visually even though it sits below it.        */
+
+.results {
+  padding-block: 7rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* .shell already handles width and inline padding. This only carries the card
+   padding token, so one value drives the card at every breakpoint. */
+.results__inner { --case-pad: 2.25rem; }
+
+/* .lede already sets the measure and a 3.5rem gap; only the gap changes here,
+   because the grid below is dense and wants to start a little sooner. */
+.results__lede { margin-bottom: 3rem; }
+
+.results__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.case {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+  padding: var(--case-pad, 2.25rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow-wrap: break-word;
+  transition: border-color .25s ease;   /* neutralised by the reduced-motion block */
+}
+.case:hover { border-color: var(--line-input); }
+
+/* Row alignment across a pair. Each card spans six parent rows and borrows
+   them, so sector / title / problem / built / result land on the same
+   baselines in both cards of a row — the result lines above all. Rows are
+   assigned explicitly rather than auto-flowed, so the one card with a quote
+   and the one with a note drop that element into row 6 and the other two
+   simply leave row 6 empty: cards stay equal height and nothing looks
+   lopsided. Where subgrid is unsupported this is skipped and the flex column
+   above stands, losing only the cross-card alignment. */
+@supports (grid-template-rows: subgrid) {
+  .case {
+    display: grid;
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: .85rem;   /* a subgrid inherits the parent gap unless it says otherwise */
+  }
+  .case__sector  { grid-row: 1; }
+  .case__title   { grid-row: 2; }
+  .case__problem { grid-row: 3; }
+  .case__built   { grid-row: 4; }
+  .case__result  { grid-row: 5; }
+  .case__quote,
+  .case__note    { grid-row: 6; }
+  /* Only the result panel stretches to fill its shared track — matching panel
+     heights are part of the payload reading as one line across the pair. The
+     rules above it hug their own text instead of trailing past it. */
+  .case__sector,
+  .case__title,
+  .case__problem,
+  .case__built { align-self: start; }
+}
+
+/* Sector stays faint, not accent: inside a card the accent is spent on the
+   result line alone. */
+.case__sector {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.case__title { font-size: 1.25rem; }
+
+/* the three scannable roles */
+.case__problem,
+.case__built,
+.case__result {
+  border-left: 2px solid var(--line);
+  padding-left: 1.15rem;
+  color: var(--muted);
+  font-size: .95rem;
+}
+.case__problem { margin-top: .45rem; }
+
+.case__problem::before,
+.case__built::before,
+.case__result::before {
+  display: block;
+  margin-bottom: .3rem;
+  font-family: var(--mono);
+  font-size: .66rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.case__problem::before { content: "The problem"; }
+.case__built::before   { content: "What we built"; }
+.case__result::before  { content: "Result"; }
+
+/* the payload */
+.case__result {
+  margin-top: .3rem;
+  padding: 1rem 1.15rem;
+  border-left-color: var(--accent);
+  border-radius: 0 var(--r) var(--r) 0;
+  background: var(--accent-dim);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 700;
+  font-stretch: 108%;
+  font-size: 1.08rem;
+  line-height: 1.4;
+}
+.case__result::before { margin-bottom: .45rem; color: var(--accent); }
+
+/* Card 1 only. Sits below a hairline as a postscript to the result, so its
+   absence from the other three reads as nothing missing. */
+.case__quote {
+  margin: .5rem 0 0;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line);
+}
+.case__quote blockquote {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.case__quote blockquote::before { content: "\201C"; }
+.case__quote blockquote::after  { content: "\201D"; }
+.case__quote figcaption {
+  margin-top: .6rem;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* Card 2 only — same hairline, quieter voice. */
+.case__note {
+  margin-top: .5rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line);
+  color: var(--faint);
+  font-size: .85rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 860px) {
+  .results__grid { grid-template-columns: minmax(0, 1fr); }
+  /* One card per row: subgrid has nothing left to align, and dropping it stops
+     the empty sixth row from adding a gap under the two shorter cards. */
+  .case { grid-row: auto; grid-template-rows: none; }
+}
+
+@media (max-width: 680px) {
+  .results { padding-block: 4.5rem; }
+  .results__inner { --case-pad: 1.6rem; }
+  .case__result { padding: .9rem 1rem; }
+}
 
 /* --- Assessment sample ------------------------------------------------- */
 .sample {
@@ -797,6 +981,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .field input,
+.field select,
 .field textarea {
   font-family: var(--body);
   font-size: .95rem;
@@ -812,10 +997,41 @@ a { color: inherit; text-decoration: none; }
 }
 .field textarea { resize: vertical; min-height: 6.5rem; }
 .field input::placeholder { color: var(--faint); }
+
+/* Select. Inherits everything above (font, colour, border, radius, padding,
+   width) from the shared control rule, so it stacks flush with a text input;
+   this block only drops the native chrome and supplies our own affordance.
+   Must stay AFTER that rule — its `background:` shorthand would otherwise
+   reset the arrow. */
+.field select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  /* the shared padding, plus room on the right so a long option label
+     ("Prefer not to say") can never run under the arrow */
+  padding-right: 2.5rem;
+  /* chevron. Stroke is --muted (#93A9C4) hard-coded because custom properties
+     cannot be interpolated into a data URI — same palette, no new colour. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%2393A9C4' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .9rem center;
+  background-size: 12px 8px;
+}
+.field select:hover { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%233B9EFF' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+/* The option list is an OS popup and will not match the card; set both colours
+   explicitly so it is at least legible rather than inheriting a dark-on-dark
+   or white-on-white combination. */
+.field select option {
+  background-color: var(--surface);
+  color: var(--ink);
+}
 .field input:hover,
+.field select:hover,
 .field textarea:hover { border-color: var(--accent); }
 
 .field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
 .field textarea[aria-invalid="true"] { border-color: var(--red-lift); }
 
 .field__err {
@@ -843,6 +1059,193 @@ a { color: inherit; text-decoration: none; }
 .bform__status:empty { display: none; }
 .bform__status[data-state="error"] { color: var(--red-lift); }
 .bform__status[data-state="ok"] { color: var(--accent); }
+
+/* --- Booking form: 3-step mode ------------------------------------------- */
+/* Progressive enhancement contract: NOTHING here hides a step, a nav button
+   or the progress list on its own. Steps are only hidden under
+   `.bform--stepped`, which main.js adds at runtime; the Back / Continue
+   buttons and the step counter carry the `hidden` attribute in the HTML and
+   are handled by the global `[hidden]` rule. With JS off the form renders
+   exactly as it always has: every step stacked, one submit, one pass. */
+
+/* Progress indicator — numbered markers joined by a rule, label underneath. */
+.bform__progress {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: .9rem;
+}
+/* the intro normally supplies the gap; hold it open if the intro is absent */
+.bform__title + .bform__progress { margin-top: 1.5rem; }
+.bform__progress-item {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  text-align: center;
+  font-size: .78rem;
+  line-height: 1.3;
+  color: var(--faint);
+  overflow-wrap: break-word;
+}
+/* the marker */
+.bform__progress-item::before {
+  content: attr(data-progress);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--line-input);
+  border-radius: 50%;
+  background: var(--void);
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--faint);
+  transition: color .18s ease, border-color .18s ease, background-color .18s ease;
+}
+/* the connecting rule: drawn leftwards from each marker to the one before it,
+   so it never escapes the list at either end. The markers are opaque and sit
+   above it, so it reads as a single track. */
+.bform__progress-item + .bform__progress-item::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 1rem;                       /* marker centre: half of the 2rem marker */
+  left: -50%;
+  right: 50%;
+  height: 1px;
+  background: var(--line);
+  transition: background-color .18s ease;
+}
+
+/* state: upcoming is the default above. current is emphasised. */
+.bform__progress-item.is-current {
+  color: var(--ink);
+  font-weight: 600;
+}
+.bform__progress-item.is-current::before {
+  border-color: var(--accent);
+  color: var(--accent-lift);
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+/* state: completed — same check mark device as .assessment-card li */
+.bform__progress-item.is-done { color: var(--muted); }
+.bform__progress-item.is-done::before {
+  content: "\2713";
+  border-color: var(--accent);
+  color: var(--accent-lift);
+  background: var(--accent-dim);
+}
+.bform__progress-item.is-done + .bform__progress-item::after { background: var(--accent); }
+
+.bform__stepcount {
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 1.4rem;
+}
+
+/* Step wrapper. Fieldset defaults (border, margin, padding, and the
+   min-width: min-content that stops it shrinking inside a grid) all go. */
+.bform__step {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+/* Legend as a plain block subhead — display: block takes it out of the
+   fieldset's notch rendering, so nothing clips it. */
+.bform__step-title {
+  display: block;      /* out of the fieldset notch, so nothing clips it */
+  float: none;
+  /* fit-content, NOT 100%: main.js focuses this legend on every step change,
+     and a full-column focus ring reads as an empty text input sitting above
+     the real fields. Hugging the text makes it read as a focused heading.
+     max-width keeps long titles wrapping inside the card at 360px. */
+  width: fit-content;
+  max-width: 100%;
+  padding: 0;
+  margin: 0 0 1.15rem;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  /* the 1.65 body leading makes the ring tall and box-like; headings on this
+     site are tight, and this also stops the ring dwarfing the glyphs */
+  line-height: 1.3;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  /* main.js moves focus here on step change */
+  scroll-margin-top: calc(var(--bar) + 1rem);
+}
+/* Same ring as everywhere else on the site (:focus-visible, 2px --accent-lift),
+   just one more pixel of offset so it clears the descenders of a tight heading.
+   The ring is load-bearing — it announces the new step — so it is never removed. */
+.bform__step-title:focus-visible { outline-offset: 4px; }
+/* No-JS / all-steps-visible mode: keep the stacked steps apart. */
+.bform:not(.bform--stepped) .bform__step + .bform__step { margin-top: 2.25rem; }
+
+/* THE step-visibility rule. Guarded by .bform--stepped, which only exists
+   once main.js has run. */
+.bform--stepped .bform__step:not(.is-active) { display: none; }
+
+/* .button--quiet has only ever been used on <a>, which is transparent by
+   default. The Back control is a real <button>, so the UA's `buttonface`
+   background shows through as a light box. Restore the intended ghost look.
+   Element-scoped, so the existing <a class="button button--quiet"> is
+   completely unaffected. */
+button.button--quiet { background: transparent; }
+button.button--quiet:active { background: var(--accent-dim); }
+
+/* Foot: Back on the left, Continue / Submit on the right. Scoped to the
+   stepped form so the single-submit no-JS layout is untouched. */
+.bform--stepped .bform__foot { justify-content: flex-start; }
+.bform--stepped .bform__foot [data-step-back] { order: 1; }
+.bform--stepped .bform__foot .bform__note { order: 2; flex: 1 1 12rem; }
+.bform--stepped .bform__foot [data-step-next],
+.bform--stepped .bform__foot [type="submit"] { order: 3; margin-left: auto; }
+
+/* Entry transition for the incoming step. */
+@media (prefers-reduced-motion: no-preference) {
+  .bform--stepped .bform__step.is-active {
+    animation: bformStepIn .28s cubic-bezier(.22, .8, .3, 1) both;
+  }
+}
+@keyframes bformStepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bform--stepped .bform__step.is-active {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Narrow screens: drop the progress labels to numbers only so the track can
+   never overflow. The step's own legend and "Step n of 3" still name it. */
+@media (max-width: 520px) {
+  .bform__progress-item > span {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .bform__progress-item { gap: 0; }
+  .bform__progress { margin-bottom: 1.1rem; }
+  /* stack the foot: buttons are already full width at this size */
+  .bform--stepped .bform__foot .bform__note { order: 4; flex: 1 1 100%; }
+}
 
 /* --- Footer -------------------------------------------------------------- */
 .foot { border-top: 1px solid var(--line-soft); padding-block: 4rem 2rem; }
@@ -978,13 +1381,13 @@ a { color: inherit; text-decoration: none; }
 
 /* --- Chat launcher ------------------------------------------------------ */
 .chat-widget { position: fixed; right: 1.25rem; bottom: max(1.25rem, env(safe-area-inset-bottom)); z-index: 200; }
-.chat-launcher { display: inline-flex; align-items: center; gap: .52rem; min-height: 44px; padding: .28rem .72rem .28rem .32rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--panel); color: var(--ink); box-shadow: 0 12px 34px rgba(0,0,0,.3); cursor: pointer; font: 700 .72rem var(--display); }
-.chat-launcher img { width: 35px; height: 35px; border-radius: 50%; }
+.chat-launcher { display: inline-flex; align-items: center; gap: .58rem; min-height: 50px; padding: .3rem .85rem .3rem .3rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--panel); color: var(--ink); box-shadow: 0 12px 34px rgba(0,0,0,.3); cursor: pointer; font: 700 .72rem var(--display); }
+.chat-launcher img { width: 40px; height: 40px; border-radius: 50%; }
 .chat-launcher:hover { background: var(--surface); }
 .chat-panel { display: flex; flex-direction: column; width: min(22rem, calc(100vw - 2rem)); height: min(39rem, calc(100vh - 6rem)); margin-bottom: .75rem; overflow: hidden; border: 1px solid var(--line-input); border-radius: var(--r-lg); background: var(--surface); box-shadow: 0 18px 50px rgba(0,0,0,.42); }
 .chat-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; border-bottom: 1px solid var(--line); }
 .chat-panel__identity { display: flex; align-items: center; gap: .65rem; }
-.chat-panel__identity img { width: 40px; height: 40px; border-radius: 50%; }
+.chat-panel__identity img { width: 44px; height: 44px; border-radius: 50%; }
 .chat-panel h2 { font-size: 1rem; }
 .chat-panel__identity p { color: var(--muted); font-size: .75rem; }
 .chat-panel__close { border: 0; background: transparent; color: var(--muted); font-size: 1.5rem; line-height: 1; cursor: pointer; }
@@ -1029,15 +1432,36 @@ a { color: inherit; text-decoration: none; }
   .foot__grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
 }
 
+/* The header CTA carries a second, shorter label for phone widths. Hidden by
+   default so the specific wording ("Discuss your front desk") is what shows
+   everywhere it fits. */
+.masthead__cta-short { display: none; }
+
 @media (max-width: 860px) {
-  .masthead__nav, .masthead__cta { display: none; }
+  .masthead__nav { display: none; }
   .masthead__toggle { display: flex; }
+  /* Never let the button wrap: a three-line CTA grew the fixed bar to 120px
+     and pushed the hero down by that much on every service page. */
+  .masthead__cta { white-space: nowrap; flex: 0 0 auto; }
+  /* Only index.html ships a drawer, and that drawer already repeats the
+     booking button - so there the header CTA is a duplicate and can go. Every
+     other page has no drawer, which made the old blanket rule hide the only
+     booking route on the pages most likely to be found from search. */
+  .masthead__inner:has(.masthead__toggle) .masthead__cta { display: none; }
+}
+
+/* Measured: the longest label, "Discuss your front desk", needs 480px to sit
+   beside the 204px wordmark. Swap to the short label below 520 and step the
+   logo down, so the button still fits at 320px with room to tap. */
+@media (max-width: 520px) {
+  .masthead__cta-full { display: none; }
+  .masthead__cta-short { display: inline; }
   .service-body__grid { grid-template-columns: 1fr; gap: 3rem; }
   .service-aside { position: static; }
 }
 
 @media (max-width: 680px) {
-  .brandmark__logo { width: 10.75rem; }
+  .brandmark__logo { width: 12.75rem; }
   .service-facts { grid-template-columns: 1fr; }
   .service-body { padding-block: 4.5rem; }
   .hero { padding-top: calc(var(--bar) + 3rem); padding-bottom: 4rem; }
@@ -1057,6 +1481,13 @@ a { color: inherit; text-decoration: none; }
   .line__say { grid-column: 1 / -1; }
   .hero__actions .button, .book__actions .button { width: 100%; }
   .guide-list article { grid-template-columns: 1fr; gap: .5rem; padding: 1.5rem; }
+}
+
+/* Declared after the 680px block because that one also sets this property and
+   would otherwise win on source order. Below 520 the header shows the short
+   CTA label, and the wordmark steps down so the two fit at 320px. */
+@media (max-width: 520px) {
+  .brandmark__logo { width: 9.375rem; }
 }
 
 /* --- Reduced motion ------------------------------------------------------ */

@@ -202,8 +202,10 @@
       setExpanded(true);
       if (moveFocus) {
         // scope to .field — the form's first `input` is a hidden control
-        // and the honeypot, neither of which can take focus
-        var first = form.querySelector('.field input, .field textarea');
+        // and the honeypot, neither of which can take focus. Scope to the
+        // visible step too: a field on a hidden step cannot take focus either.
+        var first = form.querySelector('.bform__step.is-active .field input, .bform__step.is-active .field textarea') ||
+                    form.querySelector('.field input, .field textarea');
         if (first) first.focus({ preventScroll: true });
       }
     };
@@ -211,6 +213,148 @@
     var closePanel = function () {
       panel.hidden = true;
       setExpanded(false);
+    };
+
+    /* --- Stepped flow ----------------------------------------------------
+       One <form>, three visual steps. All fields stay in the DOM the whole
+       time, so the POST body is unchanged. The CSS that hides an inactive
+       step is scoped to `.bform--stepped`, which is added right here at
+       runtime — so with JavaScript off the three fieldsets simply stack and
+       the form submits in a single pass exactly as it always did. */
+    var steps = form.querySelectorAll('.bform__step');
+    var progress = form.querySelector('.bform__progress');
+    var progressItems = form.querySelectorAll('.bform__progress-item');
+    var stepCount = form.querySelector('.bform__stepcount');
+    var backBtn = form.querySelector('[data-step-back]');
+    var nextBtn = form.querySelector('[data-step-next]');
+    var stepSubmit = form.querySelector('button[type="submit"]');
+    var briefField = document.getElementById('bf-brief');
+    var stepped = steps.length > 1 && !!backBtn && !!nextBtn;
+    var currentStep = 1;
+    var guideMode = false;
+
+    var stepLegend = function (n) {
+      var step = steps[n - 1];
+      return step ? step.querySelector('.bform__step-title') : null;
+    };
+
+    // moveFocus: true  -> always land focus on the new step's legend.
+    //            'kept'-> only if focus was already inside the form, so that a
+    //                     plain "#book" link does not yank focus off the link
+    //                     the visitor just clicked.
+    //            false -> never.
+    var goToStep = function (n, moveFocus) {
+      if (!stepped) return;
+      if (n < 1) n = 1;
+      if (n > steps.length) n = steps.length;
+
+      var hadFocusInside = form.contains(document.activeElement);
+      currentStep = n;
+
+      Array.prototype.forEach.call(steps, function (step, i) {
+        step.classList.toggle('is-active', (i + 1) === currentStep);
+      });
+
+      Array.prototype.forEach.call(progressItems, function (item, i) {
+        item.classList.toggle('is-current', (i + 1) === currentStep);
+        item.classList.toggle('is-done', (i + 1) < currentStep);
+      });
+
+      // the only non-decorative announcement of position (the rail is aria-hidden)
+      if (stepCount) stepCount.textContent = 'Step ' + currentStep + ' of ' + steps.length;
+
+      var onLast = currentStep === steps.length;
+      // Back stays available on the final step: the visitor must be able to
+      // return and fix what they wrote before committing to send it.
+      // Guide mode is the exception — it is a single "where do we send it"
+      // step, so there is nothing behind it worth walking back into.
+      backBtn.hidden = guideMode || currentStep === 1;
+      nextBtn.hidden = onLast;
+      if (stepSubmit) stepSubmit.hidden = !onLast;
+
+      if (moveFocus === true || (moveFocus === 'kept' && hadFocusInside)) {
+        var legend = stepLegend(currentStep);
+        // no preventScroll here: the new step should be brought into view
+        if (legend) legend.focus();
+      }
+    };
+
+    // Validates only the fields inside one step, reusing the same helpers the
+    // submit handler uses so the messages are worded identically.
+    var validateStep = function (n) {
+      var step = steps[n - 1];
+      if (!step) return true;
+      var firstBad = null;
+
+      Array.prototype.forEach.call(step.querySelectorAll('input, textarea, select'), function (input) {
+        if (input.checkValidity()) { clearError(input); return; }
+        showError(input, messageFor(input));
+        if (!firstBad) firstBad = input;
+      });
+
+      if (firstBad) {
+        status.textContent = 'Please fix the highlighted fields.';
+        status.setAttribute('data-state', 'error');
+        firstBad.focus();
+        return false;
+      }
+      return true;
+    };
+
+    var advanceStep = function () {
+      if (!validateStep(currentStep)) return;
+      status.textContent = '';
+      status.setAttribute('data-state', '');
+      goToStep(currentStep + 1, true);
+    };
+
+    // Reveals the step that owns `input` before anything tries to focus it —
+    // focus() on a display:none element silently does nothing, which would
+    // leave "please fix the highlighted fields" pointing at nothing visible.
+    var revealFieldStep = function (input) {
+      if (!stepped || !input || !input.closest) return;
+      var owner = input.closest('.bform__step');
+      if (!owner) return;
+      var n = parseInt(owner.getAttribute('data-step'), 10);
+      if (n && n !== currentStep) goToStep(n, false);
+    };
+
+    if (stepped) {
+      form.classList.add('bform--stepped');
+      if (progress) progress.hidden = false;
+      if (stepCount) stepCount.hidden = false;
+      backBtn.hidden = false;
+      nextBtn.hidden = false;
+
+      nextBtn.addEventListener('click', advanceStep);
+      backBtn.addEventListener('click', function () { goToStep(currentStep - 1, true); });
+
+      // Enter in a single-line field means "continue", not "submit early".
+      // Textareas keep Enter for line breaks; buttons and links keep their own.
+      form.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' || currentStep === steps.length) return;
+        var el = e.target;
+        if (!el || el.tagName === 'TEXTAREA' || el.tagName === 'BUTTON' || el.tagName === 'A') return;
+        e.preventDefault();
+        advanceStep();
+      });
+
+      goToStep(1, false);
+    }
+
+    // Guide mode reuses this form but only needs the contact step, so the
+    // brief stops being required and the rail is put away.
+    var setGuideMode = function (on) {
+      guideMode = !!on;
+      if (briefField) {
+        if (on) { briefField.removeAttribute('required'); clearError(briefField); }
+        else { briefField.setAttribute('required', ''); }
+      }
+      if (!stepped) return;
+      // hide the counter too: "Step 3 of 3" is untrue when there is one step
+      if (progress) progress.hidden = on;
+      if (stepCount) stepCount.hidden = on;
+      goToStep(on ? steps.length : 1, 'kept');
     };
 
     Array.prototype.forEach.call(toggles, function (t) {
@@ -234,6 +378,7 @@
         if (title) title.textContent = 'Where should we send your guide?';
         if (intro) intro.textContent = 'Enter your details and the guide will be ready immediately.';
         if (submit) submit.textContent = 'Get the Free Guide';
+        setGuideMode(true);
       });
     });
 
@@ -244,8 +389,9 @@
         var intro = form.querySelector('.bform__intro');
         var submit = form.querySelector('button[type="submit"]');
         if (title) title.textContent = 'Tell us where you are losing time';
-        if (intro) intro.textContent = 'Four quick fields. Robert replies within one business day.';
+        if (intro) intro.textContent = 'A few quick questions. Robert replies within one business day.';
         if (submit) submit.textContent = 'Find My Time Savings';
+        setGuideMode(false);
       });
     });
 
@@ -292,6 +438,7 @@
         e.preventDefault();
         status.textContent = 'Please fix the highlighted fields.';
         status.setAttribute('data-state', 'error');
+        revealFieldStep(firstBad);
         firstBad.focus();
         return;
       }

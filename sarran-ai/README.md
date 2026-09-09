@@ -8,8 +8,9 @@ built around the $250 AI Time Savings Assessment for small businesses, clinics, 
 | File | Purpose |
 | --- | --- |
 | `index.html` | All structure and copy, one commented block per section |
-| `styles.css` | Tokens + layout. **All colour lives in the `:root` block** — a hue change is one edit there |
-| `main.js` | Drawer, masthead tuck, scroll reveal, form flow, guide request, footer year |
+| `styles.<hash>.css` | Tokens + layout. **All colour lives in the `:root` block** — a hue change is one edit there |
+| `main.<hash>.js` | Drawer, masthead tuck, scroll reveal, form flow, guide request, footer year |
+| `scripts/stamp.py` | Re-hashes the two files above and repoints all 10 pages — **run before every commit that touches them** |
 | `small-business-time-savings-guide.html` | Free “7 Places Small Businesses Lose Time” lead magnet |
 | `assets/` | Brand logos and icon from `06_Brand_Assets/` |
 | `privacy.html` | Privacy notice linked from the booking form and footer |
@@ -18,6 +19,22 @@ built around the $250 AI Time Savings Assessment for small businesses, clinics, 
 | `vercel.json` | Security and cache headers (Vercel reads this, not a `_headers` file — translate for other hosts) |
 
 Open `index.html` directly, or serve: `python -m http.server 8000`.
+
+## Before committing a CSS or JS change
+
+```
+python scripts/stamp.py
+```
+
+`styles.css` and `main.js` carry a content hash in their filename, and `vercel.json`
+serves anything matching `*.css` / `*.js` with a one-year `immutable` cache. That is
+only safe while the URL changes whenever the bytes do — so the hash has to be
+regenerated, and all 10 pages repointed, before the change ships. Editing the hashed
+file is otherwise exactly like editing `styles.css` was.
+
+The script is idempotent, self-heals a reference someone hand-edited back to the
+unhashed name, and exits non-zero if a page references any *other* unhashed
+`.css`/`.js` — which the year-long cache rule would otherwise pin in browsers.
 
 ## Section order
 
