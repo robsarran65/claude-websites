@@ -8,6 +8,20 @@
 
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Shared by the drawer and the chat panel: both hide an overlay that
+  // contains the link the visitor just activated, which drops focus to
+  // <body>. If the link was a same-page #anchor, move focus onto the section
+  // it points to instead, so the next Tab continues from there rather than
+  // the top of the document. Returns true if it found something to focus.
+  function focusTarget(href) {
+    if (!href || href.charAt(0) !== '#' || href.length < 2) return false;
+    var el = document.getElementById(href.slice(1));
+    if (!el) return false;
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+    return true;
+  }
+
   /* --- Ask Sarran AI --------------------------------------------------- */
   var chatLauncher = document.querySelector('.chat-launcher');
   var chatPanel = document.getElementById('chat-panel');
@@ -21,14 +35,20 @@
     var appendChatMessage = function (text, kind) { var message = document.createElement('p'); message.className = 'chat-message chat-message--' + kind; message.textContent = text; chatMessages.appendChild(message); chatMessages.scrollTop = chatMessages.scrollHeight; };
     var answerChatQuestion = function (question) {
       var normalized = question.toLowerCase();
-      if (normalized.includes('assessment') || normalized.includes('250')) return 'The AI Time Savings Assessment is a $250 one-time service with a 45-minute working session, 3–7 ranked opportunities, and a written action plan. Use Start $250 assessment below. Payment is only considered verified after Stripe confirms the checkout; a button click alone is not proof of payment.';
+      if (normalized.includes('assessment') || normalized.includes('250')) return 'The AI Readiness Assessment is a $250 one-time service with a 45-minute working session, 3–7 ranked opportunities, and a written action plan. Use Start $250 assessment below. Payment is only considered verified after Stripe confirms the checkout; a button click alone is not proof of payment.';
       if (normalized.includes('book') || normalized.includes('consult') || normalized.includes('schedule')) return 'Choose Book 30 min with Robert below for a consultation. The form captures the problem first, and Robert replies within one business day.';
       if (normalized.includes('voice') || normalized.includes('call')) return 'Sarran AI builds voice agents that answer approved questions, qualify callers, schedule appointments, and hand off to a person when needed.';
       return 'Sarran AI helps small businesses, clinics, and service providers find repetitive work worth automating. Ask about the assessment, voice agents, workflow automation, or web development.';
     };
     chatLauncher.addEventListener('click', function () { setChatOpen(chatPanel.hidden); });
     if (chatClose) chatClose.addEventListener('click', function () { setChatOpen(false); chatLauncher.focus(); });
-    if (chatBook) chatBook.addEventListener('click', function () { setChatOpen(false); });
+    if (chatBook) chatBook.addEventListener('click', function () {
+      setChatOpen(false);
+      // setChatOpen hides the panel this button lives in, which drops focus
+      // to <body> — the close button and Escape both already send focus back
+      // to the launcher; this path was the one left doing neither.
+      focusTarget(chatBook.getAttribute('href')) || chatLauncher.focus();
+    });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !chatPanel.hidden) { setChatOpen(false); chatLauncher.focus(); } });
     Array.prototype.forEach.call(document.querySelectorAll('[data-chat-question]'), function (button) { button.addEventListener('click', function () { var question = button.getAttribute('data-chat-question'); appendChatMessage(question, 'user'); appendChatMessage(answerChatQuestion(question), 'agent'); }); });
     chatForm.addEventListener('submit', function (e) { e.preventDefault(); var question = chatInput.value.trim(); if (!question) return; appendChatMessage(question, 'user'); appendChatMessage(answerChatQuestion(question), 'agent'); chatInput.value = ''; });
@@ -55,7 +75,14 @@
     });
 
     drawer.addEventListener('click', function (e) {
-      if (e.target.closest('a')) closeDrawer();
+      var link = e.target.closest('a');
+      if (!link) return;
+      closeDrawer();
+      // Hiding the drawer destroys focus, because the link just activated
+      // lives inside it. Hand focus to whatever the link points at, so the
+      // next Tab continues from the section the visitor asked for instead of
+      // restarting at the top of the document.
+      focusTarget(link.getAttribute('href')) || toggle.focus();
     });
 
     document.addEventListener('keydown', function (e) {
@@ -275,7 +302,20 @@
       if (moveFocus === true || (moveFocus === 'kept' && hadFocusInside)) {
         var legend = stepLegend(currentStep);
         // no preventScroll here: the new step should be brought into view
-        if (legend) legend.focus();
+        if (legend) {
+          legend.focus();
+          // :focus-visible is suppressed on a programmatic focus() that
+          // follows a pointer event (clicking Continue/Back with a mouse), so
+          // the ring the CSS comment calls "never removed" was in fact
+          // removed for every pointer-initiated step change. Force it with a
+          // plain class instead of relying on the heuristic, and drop the
+          // class on the step's own blur so it does not linger past the step
+          // it announced.
+          legend.classList.add('is-step-focus');
+          legend.addEventListener('blur', function () {
+            legend.classList.remove('is-step-focus');
+          }, { once: true });
+        }
       }
     };
 
@@ -384,13 +424,13 @@
 
     Array.prototype.forEach.call(assessmentRequests, function (a) {
       a.addEventListener('click', function () {
-        if (interestField) interestField.value = 'AI Time Savings Assessment';
+        if (interestField) interestField.value = 'AI Readiness Assessment';
         var title = form.querySelector('.bform__title');
         var intro = form.querySelector('.bform__intro');
         var submit = form.querySelector('button[type="submit"]');
         if (title) title.textContent = 'Tell us where you are losing time';
         if (intro) intro.textContent = 'A few quick questions. Robert replies within one business day.';
-        if (submit) submit.textContent = 'Find My Time Savings';
+        if (submit) submit.textContent = 'Request My Assessment';
         setGuideMode(false);
       });
     });
@@ -474,6 +514,12 @@
             '<a href="mailto:robert@sarranai.com">robert@sarranai.com</a> ' +
             'and we will pick it up from there.';
         status.setAttribute('data-state', 'error');
+        // The visitor's focus is still on the disabled submit button at this
+        // point, several fields above this message — send it to the recovery
+        // link so the mailto: is one Tab away rather than a walk back up the
+        // whole form.
+        var recovery = status.querySelector('a');
+        if (recovery) { recovery.setAttribute('tabindex', '-1'); recovery.focus(); }
         // surface the relay's own reason in the console for diagnosis —
         // it returns HTTP 200 even when it rejects a submission
         if (reason && window.console) window.console.error('[booking form]', reason);

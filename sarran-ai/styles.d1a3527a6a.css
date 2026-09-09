@@ -30,7 +30,17 @@
 
   /* Action — brand rule: red is the single deliberate action color */
   --red:       #D62828;
-  --red-lift:  #E23B3B;
+  /* Hover/active state for red buttons. Darker than --red, not lighter: white
+     button text on the old lighter hover measured 4.27:1 (needs 4.5). Darker
+     moves the wrong direction for a "lift" but the right direction for
+     contrast — name kept for the smaller diff. 5.46:1 white text on this;
+     3.20:1 as the invalid-field border on --surface (WCAG 1.4.11). */
+  --red-lift:  #CB2626;
+  /* Error copy only — .field__err and .bform__status[data-state="error"] —
+     both painted on --void. --red-lift there measured 4.47:1 (needs 4.5);
+     this is tuned to 4.59:1. Do not reuse for a background: too light for
+     white text to sit on. */
+  --red-text:  #E33F3F;
 
   --display: "Archivo", "Segoe UI", sans-serif;
   --body:    "Public Sans", Calibri, Arial, sans-serif;
@@ -996,7 +1006,8 @@ a { color: inherit; text-decoration: none; }
   transition: border-color .16s ease;
 }
 .field textarea { resize: vertical; min-height: 6.5rem; }
-.field input::placeholder { color: var(--faint); }
+.field input::placeholder,
+.chat-form input::placeholder { color: var(--faint); }
 
 /* Select. Inherits everything above (font, colour, border, radius, padding,
    width) from the shared control rule, so it stacks flush with a text input;
@@ -1036,7 +1047,7 @@ a { color: inherit; text-decoration: none; }
 
 .field__err {
   font-size: .82rem;
-  color: var(--red-lift);
+  color: var(--red-text);
   margin-top: .35rem;
 }
 .field__err[hidden] { display: none; }
@@ -1057,7 +1068,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--muted);
 }
 .bform__status:empty { display: none; }
-.bform__status[data-state="error"] { color: var(--red-lift); }
+.bform__status[data-state="error"] { color: var(--red-text); }
 .bform__status[data-state="ok"] { color: var(--accent); }
 
 /* --- Booking form: 3-step mode ------------------------------------------- */
@@ -1186,8 +1197,18 @@ a { color: inherit; text-decoration: none; }
 }
 /* Same ring as everywhere else on the site (:focus-visible, 2px --accent-lift),
    just one more pixel of offset so it clears the descenders of a tight heading.
-   The ring is load-bearing — it announces the new step — so it is never removed. */
-.bform__step-title:focus-visible { outline-offset: 4px; }
+   The ring is load-bearing — it announces the new step — so it is never
+   removed: :focus-visible alone is not enough, because Chrome suppresses it
+   on a script-driven focus() that follows a pointer event, which is exactly
+   how Continue/Back move focus. main.js adds .is-step-focus alongside the
+   focus() call and drops it on blur, so the ring shows regardless of how the
+   step was reached. */
+.bform__step-title:focus-visible,
+.bform__step-title.is-step-focus {
+  outline: 2px solid var(--accent-lift);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
 /* No-JS / all-steps-visible mode: keep the stacked steps apart. */
 .bform:not(.bform--stepped) .bform__step + .bform__step { margin-top: 2.25rem; }
 
