@@ -1458,12 +1458,37 @@ button.button--quiet:active { background: var(--accent-dim); }
    everywhere it fits. */
 .masthead__cta-short { display: none; }
 
+/* Unconditional, not just under the 860px query below: a flex child shrinks
+   by default, and at exactly the shell's own max-width the full-label CTA
+   ("Request My Assessment") was tight enough to lose that contest and wrap
+   to three lines on every desktop width from ~900px up to 1920px+ - the
+   button never grows past ~212px regardless of how much room the row
+   actually has above 1200px. flex-shrink:0 gives it its natural width first;
+   the nav is what should give ground if the row is ever genuinely tight. */
+.masthead__cta { white-space: nowrap; flex-shrink: 0; }
+
+/* index.html's nav carries 7 links (every other page has 2) and its masthead
+   CTA is shortened to "Book an assessment" specifically because of that -
+   even so, the full row (logo + nav + cta) needs ~1183px of unconstrained
+   width, measured directly with nav.style.whiteSpace/flexShrink forced so
+   the number reflects true content size, not a shrunk-and-wrapped one. Below
+   that the row does not fit and nav's own children (each flex-shrink:1 by
+   default) start shrinking individual multi-word labels until they wrap at a
+   word boundary - a two-line "Who we help" costs nothing in box height
+   (padding already accommodates it) so it is invisible to a height check and
+   was caught only by counting actual rendered text lines. Threshold set with
+   margin on both sides of the shell's own 1200px cap, where available width
+   freezes regardless of viewport. */
+@media (max-width: 1200px) {
+  .masthead__inner:has(.masthead__toggle) .masthead__nav { display: none; }
+  .masthead__inner:has(.masthead__toggle) .masthead__toggle { display: flex; }
+}
+
 @media (max-width: 860px) {
   .masthead__nav { display: none; }
   .masthead__toggle { display: flex; }
-  /* Never let the button wrap: a three-line CTA grew the fixed bar to 120px
-     and pushed the hero down by that much on every service page. */
-  .masthead__cta { white-space: nowrap; flex: 0 0 auto; }
+  /* white-space/flex-shrink for .masthead__cta now live on the unconditional
+     rule above - they apply here too, this query just adds the toggle. */
   /* Only index.html ships a drawer, and that drawer already repeats the
      booking button - so there the header CTA is a duplicate and can go. Every
      other page has no drawer, which made the old blanket rule hide the only
