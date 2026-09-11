@@ -8,17 +8,22 @@ built around the $250 AI Time Savings Assessment for small businesses, clinics, 
 | File | Purpose |
 | --- | --- |
 | `index.html` | All structure and copy, one commented block per section |
+| `connect.html` | Cinematic, mobile-first business-card QR experience with four workflow simulations, a time-savings scenario, and guided service recommendation |
 | `styles.<hash>.css` | Tokens + layout. **All colour lives in the `:root` block** — a hue change is one edit there |
 | `main.<hash>.js` | Drawer, masthead tuck, scroll reveal, form flow, guide request, footer year |
 | `scripts/stamp.py` | Re-hashes the two files above and repoints all 10 pages — **run before every commit that touches them** |
 | `small-business-time-savings-guide.html` | Free “7 Places Small Businesses Lose Time” lead magnet |
-| `assets/` | Brand logos and icon from `06_Brand_Assets/` |
+| `assets/` | Brand logos, icon, Robert's downloadable contact card, and Connect QR files |
 | `privacy.html` | Privacy notice linked from the booking form and footer |
 | `robots.txt` / `sitemap.xml` | Production crawler guidance and canonical URL discovery |
 | `llms.txt` | Concise public business and service summary for compatible AI retrieval tools |
 | `vercel.json` | Security and cache headers (Vercel reads this, not a `_headers` file — translate for other hosts) |
 
 Open `index.html` directly, or serve: `python -m http.server 8000`.
+
+Use `http://localhost:8000/connect.html` to test the business-card experience locally.
+The production QR points to `https://www.sarranai.com/connect`; Vercel rewrites that
+address to `connect.html` after deployment.
 
 ## Before committing a CSS or JS change
 

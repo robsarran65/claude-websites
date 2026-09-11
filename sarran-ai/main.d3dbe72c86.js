@@ -201,6 +201,301 @@
     });
   }
 
+  /* --- Business-card connect experience -------------------------------- */
+  var connectChoices = document.querySelectorAll('[data-connect-choice]');
+  var connectResult = document.querySelector('[data-connect-result]');
+
+  if (connectChoices.length && connectResult) {
+    var connectBoot = document.querySelector('[data-connect-boot]');
+    var connectBootSkip = document.querySelector('[data-connect-boot-skip]');
+    var connectServiceName = connectResult.querySelector('[data-connect-service-name]');
+    var connectServiceKind = connectResult.querySelector('[data-connect-service-kind]');
+    var connectServiceBody = connectResult.querySelector('[data-connect-service-body]');
+    var connectServiceLink = connectResult.querySelector('[data-connect-service-link]');
+    var connectChallengeField = document.querySelector('[data-challenge-field]');
+    var connectEstimateField = document.querySelector('[data-estimate-field]');
+    var connectBrief = document.getElementById('bf-brief');
+    var workflowTitle = document.querySelector('[data-workflow-title]');
+    var workflowIntro = document.querySelector('[data-workflow-intro]');
+    var workflowStatus = document.querySelector('[data-workflow-status]');
+    var workflowSteps = document.querySelectorAll('[data-workflow-step]');
+    var workflowSkip = document.querySelector('[data-workflow-skip]');
+    var workflowReplay = document.querySelector('[data-workflow-replay]');
+    var connectAnnouncement = document.querySelector('[data-connect-announcement]');
+    var experienceStep = document.querySelector('[data-experience-step]');
+    var experienceFill = document.querySelector('[data-experience-fill]');
+    var progressSteps = document.querySelectorAll('[data-progress-step]');
+    var weeklyHours = document.querySelector('[data-weekly-hours]');
+    var weeklyOutput = document.querySelector('[data-weekly-output]');
+    var annualHours = document.querySelector('[data-annual-hours]');
+    var workdays = document.querySelector('[data-workdays]');
+    var savingsResult = annualHours && annualHours.closest('.connect-savings__result');
+    var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var workflowTimers = [];
+    var currentRecommendation = null;
+    var currentExperienceStep = 1;
+
+    var connectRecommendations = {
+      calls: {
+        challenge: 'Missed or repetitive calls',
+        kind: 'AI voice agents',
+        name: 'A voice agent may be worth testing first.',
+        body: 'Before building anything, Robert will confirm the call flow, approved answers, exceptions, likely cost, and where a person must remain in control.',
+        link: 'ai-voice-agents.html',
+        linkText: 'Explore AI voice agents',
+        prompt: 'Tell Robert where calls are being missed, repeated, or delayed.',
+        workflowTitle: 'One call becomes a handled next step.',
+        workflowIntro: 'An illustrative call flow using approved business information and a defined human handoff.',
+        steps: [
+          ['Customer calls', 'A customer reaches the business, including after hours.'],
+          ['Approved questions answered', 'The agent uses only approved business information.'],
+          ['Caller need identified', 'The next action is selected from defined options.'],
+          ['Team receives the next step', 'A callback, appointment request, and summary are ready.']
+        ]
+      },
+      admin: {
+        challenge: 'Manual administration and follow up',
+        kind: 'Workflow automation',
+        name: 'This workflow may be ready for automation.',
+        body: 'Robert will confirm the information source, validation rules, system permissions, exceptions, and measurable benefit before recommending a build.',
+        link: 'workflow-automation.html',
+        linkText: 'Explore workflow automation',
+        prompt: 'Tell Robert which administrative task or follow up takes too much time.',
+        workflowTitle: 'Routine information moves without another manual handoff.',
+        workflowIntro: 'An illustrative workflow where rules handle the repeatable path and exceptions return to a person.',
+        steps: [
+          ['Request received', 'A form, email, or approved trigger starts the workflow.'],
+          ['Required information checked', 'Deterministic rules validate the fields that matter.'],
+          ['Approved system updated', 'The record moves without copying it by hand.'],
+          ['Follow up and exceptions routed', 'The routine path continues; unusual cases reach a person.']
+        ]
+      },
+      website: {
+        challenge: 'A website that does not convert',
+        kind: 'AI integrated web',
+        name: 'Your website may need a clearer conversion path.',
+        body: 'Robert will confirm visitor intent, qualification needs, approved content, handoff rules, and the smallest change likely to improve the customer journey.',
+        link: 'ai-web-development.html',
+        linkText: 'Explore AI integrated websites',
+        prompt: 'Tell Robert what visitors should do on your website and where they currently drop off.',
+        workflowTitle: 'A visitor reaches the right action faster.',
+        workflowIntro: 'An illustrative website journey that remains usable even if an AI feature is unavailable.',
+        steps: [
+          ['Visitor chooses a need', 'The experience starts with one clear question.'],
+          ['Relevant answer appears', 'Approved content matches the visitor’s intent.'],
+          ['Fit details collected', 'Only the information needed for the next step is requested.'],
+          ['Qualified inquiry routed', 'The business receives a structured, useful request.']
+        ]
+      },
+      unsure: {
+        challenge: 'Not sure where to begin',
+        kind: 'AI readiness',
+        name: 'Start by identifying and ranking the opportunities.',
+        body: 'One 45 minute working session turns the friction in your week into 3–7 ranked opportunities, expected tool costs, and a written plan you own.',
+        link: 'ai-readiness-assessment.html',
+        linkText: 'See assessment details',
+        prompt: 'Tell Robert which part of your week feels slow, repetitive, or harder than it should be.',
+        workflowTitle: 'A frustrating week becomes a ranked starting plan.',
+        workflowIntro: 'An illustrative assessment path with no obligation to hire Sarran AI for implementation.',
+        steps: [
+          ['Recurring work mapped', 'The tasks, delays, and handoffs become visible.'],
+          ['Friction identified', 'Repeated effort and missed opportunities are separated from noise.'],
+          ['Opportunities ranked', 'Value, effort, cost, control, and risk are compared.'],
+          ['Best first move documented', 'You receive a practical written plan you own.']
+        ]
+      }
+    };
+
+    var connectTrack = function (name, detail) {
+      var eventDetail = detail || {};
+      if (window.dataLayer && typeof window.dataLayer.push === 'function') {
+        window.dataLayer.push(Object.assign({ event: name }, eventDetail));
+      }
+      try {
+        window.dispatchEvent(new CustomEvent('sarran:analytics', { detail: Object.assign({ event: name }, eventDetail) }));
+      } catch (ignore) { /* analytics hooks must never interrupt the page */ }
+    };
+
+    connectTrack('connect_page_view', { source: 'business_card_qr' });
+
+    var updateProgress = function (step) {
+      currentExperienceStep = Math.max(currentExperienceStep, step);
+      if (experienceStep) experienceStep.textContent = 'Step ' + currentExperienceStep + ' of 4';
+      if (experienceFill) experienceFill.style.width = (currentExperienceStep * 25) + '%';
+      Array.prototype.forEach.call(progressSteps, function (item) {
+        var itemStep = parseInt(item.getAttribute('data-progress-step'), 10);
+        if (itemStep === currentExperienceStep) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+        item.classList.toggle('is-complete', itemStep < currentExperienceStep);
+      });
+    };
+
+    var clearWorkflowTimers = function () {
+      workflowTimers.forEach(function (timer) { window.clearTimeout(timer); });
+      workflowTimers = [];
+    };
+
+    var completeWorkflow = function (wasSkipped) {
+      clearWorkflowTimers();
+      Array.prototype.forEach.call(workflowSteps, function (step) {
+        step.classList.remove('is-active');
+        step.classList.add('is-complete');
+      });
+      if (workflowStatus) workflowStatus.textContent = 'Example complete · human control preserved';
+      if (workflowSkip) workflowSkip.hidden = true;
+      if (workflowReplay) workflowReplay.hidden = false;
+      updateProgress(3);
+      if (connectAnnouncement && currentRecommendation) {
+        connectAnnouncement.textContent = 'Workflow example complete. Recommendation: ' + currentRecommendation.name;
+      }
+      connectTrack(wasSkipped ? 'connect_workflow_skipped' : 'connect_workflow_completed', {
+        challenge_id: currentRecommendation && currentRecommendation.id
+      });
+    };
+
+    var runWorkflow = function (recommendation, instant) {
+      clearWorkflowTimers();
+      currentRecommendation = recommendation;
+      workflowTitle.textContent = recommendation.workflowTitle;
+      workflowIntro.textContent = recommendation.workflowIntro;
+      Array.prototype.forEach.call(workflowSteps, function (step, index) {
+        var copy = recommendation.steps[index];
+        step.querySelector('strong').textContent = copy[0];
+        step.querySelector('small').textContent = copy[1];
+        step.classList.remove('is-active', 'is-complete');
+      });
+      if (workflowStatus) workflowStatus.textContent = 'Illustrative workflow · no customer data sent';
+      if (workflowReplay) workflowReplay.hidden = true;
+
+      if (instant || motionQuery.matches) {
+        completeWorkflow();
+        return;
+      }
+
+      if (workflowSkip) workflowSkip.hidden = false;
+      Array.prototype.forEach.call(workflowSteps, function (step, index) {
+        workflowTimers.push(window.setTimeout(function () {
+          if (index > 0) {
+            workflowSteps[index - 1].classList.remove('is-active');
+            workflowSteps[index - 1].classList.add('is-complete');
+          }
+          step.classList.add('is-active');
+          if (workflowStatus) workflowStatus.textContent = 'Processing step ' + (index + 1) + ' of ' + workflowSteps.length;
+        }, 260 + index * 620));
+      });
+      workflowTimers.push(window.setTimeout(completeWorkflow, 260 + workflowSteps.length * 620));
+    };
+
+    var updateSavings = function (finishStage) {
+      var hours = Math.max(1, Math.min(20, parseInt(weeklyHours.value, 10) || 1));
+      var annual = hours * 48;
+      var days = annual / 8;
+      weeklyOutput.textContent = String(hours);
+      annualHours.textContent = annual.toLocaleString('en-US');
+      workdays.textContent = Number.isInteger(days) ? String(days) : days.toFixed(1);
+      weeklyHours.setAttribute('aria-valuetext', hours + ' hours per week');
+      weeklyHours.style.setProperty('--range-fill', ((hours - 1) / 19 * 100) + '%');
+      if (savingsResult) {
+        savingsResult.classList.remove('is-counting');
+        window.requestAnimationFrame(function () { savingsResult.classList.add('is-counting'); });
+      }
+      if (connectEstimateField) connectEstimateField.value = hours + ' hours per week; ' + annual + ' hours across 48 working weeks';
+      if (finishStage) {
+        updateProgress(4);
+        connectResult.classList.add('is-ready');
+        if (connectAnnouncement && currentRecommendation) {
+          connectAnnouncement.textContent = 'Illustrative estimate: ' + annual + ' hours across 48 working weeks. Recommendation: ' + currentRecommendation.name;
+        }
+        connectTrack('connect_estimate_updated', { weekly_hours: hours, annual_hours: annual });
+      }
+    };
+
+    Array.prototype.forEach.call(connectChoices, function (choice) { choice.disabled = false; });
+    if (weeklyHours) {
+      updateSavings(false);
+      weeklyHours.addEventListener('input', function () { updateSavings(false); });
+      weeklyHours.addEventListener('change', function () { updateSavings(true); });
+    }
+
+    if (connectBoot) {
+      var closeBoot = function () {
+        var introHadFocus = connectBoot.contains(document.activeElement);
+        connectBoot.hidden = true;
+        if (introHadFocus) {
+          var connectTitle = document.getElementById('connect-title');
+          if (connectTitle) connectTitle.focus();
+        }
+      };
+      if (connectBootSkip) connectBootSkip.addEventListener('click', closeBoot);
+      if (motionQuery.matches) closeBoot();
+      else window.setTimeout(closeBoot, 2600);
+    }
+
+    Array.prototype.forEach.call(connectChoices, function (button) {
+      button.addEventListener('click', function (event) {
+        var id = button.getAttribute('data-connect-choice');
+        var recommendation = connectRecommendations[id];
+        if (!recommendation) return;
+        recommendation.id = id;
+
+        Array.prototype.forEach.call(connectChoices, function (choice) {
+          choice.setAttribute('aria-pressed', String(choice === button));
+        });
+
+        connectServiceKind.textContent = recommendation.kind;
+        connectServiceName.textContent = recommendation.name;
+        connectServiceBody.textContent = recommendation.body;
+        connectServiceLink.setAttribute('href', recommendation.link);
+        connectServiceLink.firstChild.nodeValue = recommendation.linkText + ' ';
+        if (connectChallengeField) connectChallengeField.value = recommendation.challenge;
+        if (connectBrief) connectBrief.setAttribute('placeholder', recommendation.prompt);
+        if (weeklyHours) weeklyHours.disabled = false;
+
+        connectResult.classList.remove('is-updated');
+        window.requestAnimationFrame(function () { connectResult.classList.add('is-updated'); });
+        updateProgress(2);
+        runWorkflow(recommendation, false);
+        connectTrack('connect_challenge_selected', { challenge_id: id });
+
+        if (connectAnnouncement) connectAnnouncement.textContent = 'Showing an illustrative workflow for ' + recommendation.challenge + '.';
+        // Keyboard activation gets a predictable destination; pointer and
+        // touch users keep their position naturally.
+        if (event.detail === 0) workflowTitle.focus();
+      });
+    });
+
+    if (workflowSkip) workflowSkip.addEventListener('click', function () {
+      completeWorkflow(true);
+    });
+    if (workflowReplay) workflowReplay.addEventListener('click', function () {
+      if (currentRecommendation) runWorkflow(currentRecommendation, false);
+    });
+
+    var renderReducedMotion = function () {
+      if (!motionQuery.matches) return;
+      if (connectBoot) connectBoot.hidden = true;
+      if (currentRecommendation) runWorkflow(currentRecommendation, true);
+    };
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', renderReducedMotion);
+    else if (motionQuery.addListener) motionQuery.addListener(renderReducedMotion);
+
+    var connectStart = document.querySelector('[data-connect-start]');
+    if (connectStart) connectStart.addEventListener('click', function () {
+      connectTrack('connect_experience_started', { source: 'business_card_qr' });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-contact-save]'), function (link) {
+      link.addEventListener('click', function () { connectTrack('connect_contact_save_click', { format: 'vcf' }); });
+    });
+
+    var connectAssessment = document.querySelector('[data-connect-assessment]');
+    if (connectAssessment) {
+      connectAssessment.addEventListener('click', function () {
+        connectTrack('connect_primary_cta_click', { placement: 'recommendation' });
+      });
+    }
+  }
+
   /* --- Booking form ----------------------------------------------------- */
   var panel = document.getElementById('book-form');
   var form = panel && panel.querySelector('.bform');
