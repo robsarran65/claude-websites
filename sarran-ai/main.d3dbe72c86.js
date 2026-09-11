@@ -222,6 +222,8 @@
     var workflowSkip = document.querySelector('[data-workflow-skip]');
     var workflowReplay = document.querySelector('[data-workflow-replay]');
     var connectAnnouncement = document.querySelector('[data-connect-announcement]');
+    var connectBuild = document.querySelector('[data-connect-build]');
+    var buildBlocks = document.querySelectorAll('[data-build-block]');
     var experienceStep = document.querySelector('[data-experience-step]');
     var experienceFill = document.querySelector('[data-experience-fill]');
     var progressSteps = document.querySelectorAll('[data-progress-step]');
@@ -318,10 +320,14 @@
 
     connectTrack('connect_page_view', { source: 'business_card_qr' });
 
+    // A refresh should replay the intro from the top, not restore mid-page scroll.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (!window.location.hash) window.scrollTo(0, 0);
+
     var updateProgress = function (step) {
       currentExperienceStep = Math.max(currentExperienceStep, step);
       if (experienceStep) experienceStep.textContent = 'Step ' + currentExperienceStep + ' of 4';
-      if (experienceFill) experienceFill.style.width = (currentExperienceStep * 25) + '%';
+      if (experienceFill) experienceFill.style.transform = 'scaleX(' + (currentExperienceStep / 4) + ')';
       Array.prototype.forEach.call(progressSteps, function (item) {
         var itemStep = parseInt(item.getAttribute('data-progress-step'), 10);
         if (itemStep === currentExperienceStep) item.setAttribute('aria-current', 'step');
@@ -341,6 +347,8 @@
         step.classList.remove('is-active');
         step.classList.add('is-complete');
       });
+      Array.prototype.forEach.call(buildBlocks, function (block) { block.classList.add('is-built'); });
+      if (connectBuild) connectBuild.classList.add('is-live');
       if (workflowStatus) workflowStatus.textContent = 'Example complete · human control preserved';
       if (workflowSkip) workflowSkip.hidden = true;
       if (workflowReplay) workflowReplay.hidden = false;
@@ -364,6 +372,8 @@
         step.querySelector('small').textContent = copy[1];
         step.classList.remove('is-active', 'is-complete');
       });
+      Array.prototype.forEach.call(buildBlocks, function (block) { block.classList.remove('is-built'); });
+      if (connectBuild) connectBuild.classList.remove('is-live');
       if (workflowStatus) workflowStatus.textContent = 'Illustrative workflow · no customer data sent';
       if (workflowReplay) workflowReplay.hidden = true;
 
@@ -380,6 +390,9 @@
             workflowSteps[index - 1].classList.add('is-complete');
           }
           step.classList.add('is-active');
+          Array.prototype.forEach.call(buildBlocks, function (block) {
+            if (block.getAttribute('data-build-block') === String(index + 1)) block.classList.add('is-built');
+          });
           if (workflowStatus) workflowStatus.textContent = 'Processing step ' + (index + 1) + ' of ' + workflowSteps.length;
         }, 260 + index * 620));
       });
@@ -458,9 +471,9 @@
         connectTrack('connect_challenge_selected', { challenge_id: id });
 
         if (connectAnnouncement) connectAnnouncement.textContent = 'Showing an illustrative workflow for ' + recommendation.challenge + '.';
-        // Keyboard activation gets a predictable destination; pointer and
-        // touch users keep their position naturally.
-        if (event.detail === 0) workflowTitle.focus();
+        var connectDemo = workflowTitle.closest('.connect-demo');
+        if (connectDemo) connectDemo.scrollIntoView({ behavior: motionQuery.matches ? 'auto' : 'smooth', block: 'start' });
+        if (event.detail === 0) workflowTitle.focus({ preventScroll: true });
       });
     });
 
