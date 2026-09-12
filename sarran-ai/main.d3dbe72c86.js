@@ -414,7 +414,6 @@
       }
       if (connectEstimateField) connectEstimateField.value = hours + ' hours per week; ' + annual + ' hours across 48 working weeks';
       if (finishStage) {
-        updateProgress(4);
         connectResult.classList.add('is-ready');
         if (connectAnnouncement && currentRecommendation) {
           connectAnnouncement.textContent = 'Illustrative estimate: ' + annual + ' hours across 48 working weeks. Recommendation: ' + currentRecommendation.name;
@@ -502,10 +501,31 @@
     });
 
     var connectAssessment = document.querySelector('[data-connect-assessment]');
+    var recommendationViewed = false;
     if (connectAssessment) {
       connectAssessment.addEventListener('click', function () {
+        updateProgress(4);
         connectTrack('connect_primary_cta_click', { placement: 'recommendation' });
       });
+    }
+
+    // Detect when recommendation card is 40% visible and activate Act progress
+    if (connectResult && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          // Only activate Act if a challenge has been selected (currentRecommendation exists)
+          // and the card is at least 40% visible and we haven't already logged this
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4 && currentRecommendation && !recommendationViewed) {
+            updateProgress(4);
+            recommendationViewed = true;
+            connectTrack('connect_recommendation_viewed', { challenge_id: currentRecommendation.id });
+            if (connectAnnouncement) {
+              connectAnnouncement.textContent = 'Recommendation for ' + currentRecommendation.challenge + ': ' + currentRecommendation.name + '.';
+            }
+          }
+        });
+      }, { threshold: 0.4 });
+      observer.observe(connectResult);
     }
   }
 
