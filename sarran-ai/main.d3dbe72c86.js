@@ -222,8 +222,6 @@
     var workflowSkip = document.querySelector('[data-workflow-skip]');
     var workflowReplay = document.querySelector('[data-workflow-replay]');
     var connectAnnouncement = document.querySelector('[data-connect-announcement]');
-    var connectBuild = document.querySelector('[data-connect-build]');
-    var buildBlocks = document.querySelectorAll('[data-build-block]');
     var experienceStep = document.querySelector('[data-experience-step]');
     var experienceFill = document.querySelector('[data-experience-fill]');
     var progressSteps = document.querySelectorAll('[data-progress-step]');
@@ -320,14 +318,10 @@
 
     connectTrack('connect_page_view', { source: 'business_card_qr' });
 
-    // A refresh should replay the intro from the top, not restore mid-page scroll.
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    if (!window.location.hash) window.scrollTo(0, 0);
-
     var updateProgress = function (step) {
       currentExperienceStep = Math.max(currentExperienceStep, step);
       if (experienceStep) experienceStep.textContent = 'Step ' + currentExperienceStep + ' of 4';
-      if (experienceFill) experienceFill.style.transform = 'scaleX(' + (currentExperienceStep / 4) + ')';
+      if (experienceFill) experienceFill.style.width = (currentExperienceStep * 25) + '%';
       Array.prototype.forEach.call(progressSteps, function (item) {
         var itemStep = parseInt(item.getAttribute('data-progress-step'), 10);
         if (itemStep === currentExperienceStep) item.setAttribute('aria-current', 'step');
@@ -347,8 +341,6 @@
         step.classList.remove('is-active');
         step.classList.add('is-complete');
       });
-      Array.prototype.forEach.call(buildBlocks, function (block) { block.classList.add('is-built'); });
-      if (connectBuild) connectBuild.classList.add('is-live');
       if (workflowStatus) workflowStatus.textContent = 'Example complete · human control preserved';
       if (workflowSkip) workflowSkip.hidden = true;
       if (workflowReplay) workflowReplay.hidden = false;
@@ -372,8 +364,6 @@
         step.querySelector('small').textContent = copy[1];
         step.classList.remove('is-active', 'is-complete');
       });
-      Array.prototype.forEach.call(buildBlocks, function (block) { block.classList.remove('is-built'); });
-      if (connectBuild) connectBuild.classList.remove('is-live');
       if (workflowStatus) workflowStatus.textContent = 'Illustrative workflow · no customer data sent';
       if (workflowReplay) workflowReplay.hidden = true;
 
@@ -390,9 +380,6 @@
             workflowSteps[index - 1].classList.add('is-complete');
           }
           step.classList.add('is-active');
-          Array.prototype.forEach.call(buildBlocks, function (block) {
-            if (block.getAttribute('data-build-block') === String(index + 1)) block.classList.add('is-built');
-          });
           if (workflowStatus) workflowStatus.textContent = 'Processing step ' + (index + 1) + ' of ' + workflowSteps.length;
         }, 260 + index * 620));
       });
@@ -414,6 +401,7 @@
       }
       if (connectEstimateField) connectEstimateField.value = hours + ' hours per week; ' + annual + ' hours across 48 working weeks';
       if (finishStage) {
+        updateProgress(4);
         connectResult.classList.add('is-ready');
         if (connectAnnouncement && currentRecommendation) {
           connectAnnouncement.textContent = 'Illustrative estimate: ' + annual + ' hours across 48 working weeks. Recommendation: ' + currentRecommendation.name;
@@ -470,9 +458,9 @@
         connectTrack('connect_challenge_selected', { challenge_id: id });
 
         if (connectAnnouncement) connectAnnouncement.textContent = 'Showing an illustrative workflow for ' + recommendation.challenge + '.';
-        var connectDemo = workflowTitle.closest('.connect-demo');
-        if (connectDemo) connectDemo.scrollIntoView({ behavior: motionQuery.matches ? 'auto' : 'smooth', block: 'start' });
-        if (event.detail === 0) workflowTitle.focus({ preventScroll: true });
+        // Keyboard activation gets a predictable destination; pointer and
+        // touch users keep their position naturally.
+        if (event.detail === 0) workflowTitle.focus();
       });
     });
 
@@ -501,31 +489,10 @@
     });
 
     var connectAssessment = document.querySelector('[data-connect-assessment]');
-    var recommendationViewed = false;
     if (connectAssessment) {
       connectAssessment.addEventListener('click', function () {
-        updateProgress(4);
         connectTrack('connect_primary_cta_click', { placement: 'recommendation' });
       });
-    }
-
-    // Detect when recommendation card is 40% visible and activate Act progress
-    if (connectResult && 'IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          // Only activate Act if a challenge has been selected (currentRecommendation exists)
-          // and the card is at least 40% visible and we haven't already logged this
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.4 && currentRecommendation && !recommendationViewed) {
-            updateProgress(4);
-            recommendationViewed = true;
-            connectTrack('connect_recommendation_viewed', { challenge_id: currentRecommendation.id });
-            if (connectAnnouncement) {
-              connectAnnouncement.textContent = 'Recommendation for ' + currentRecommendation.challenge + ': ' + currentRecommendation.name + '.';
-            }
-          }
-        });
-      }, { threshold: 0.4 });
-      observer.observe(connectResult);
     }
   }
 

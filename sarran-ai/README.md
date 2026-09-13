@@ -43,9 +43,10 @@ unhashed name, and exits non-zero if a page references any *other* unhashed
 
 ## Section order
 
-Header · **Hero** (headline + $250 assessment) · Founder pedigree strip · **Who we help** · **Solutions** (4) ·
-**How it works** (4 phases) · **Why it holds up** (production/governance) ·
-FAQ · Meet Robert · Free guide · Contact form · Footer
+Header · **Hero** (headline + $250 assessment) · **Sample deliverable** · **Case studies** ·
+**Who we help** · **Solutions** (4) · **How it works** (4 phases) · **Why it holds up**
+(production/governance) · **Meet Robert** · Founder career history · FAQ · Free guide ·
+Contact form · Footer
 
 ## Design decisions
 

@@ -2,6 +2,15 @@
 
 Date: September 11, 2026
 
+## Homepage reorder — September 13, 2026
+
+- All 12 original homepage sections are byte-for-byte unchanged.
+- The sections appear in the approved order: hero, sample deliverable, case studies, who we help, services, process, production safeguards, Meet Robert, founder career history, FAQ, free guide, and assessment form.
+- All original navigation, buttons, payment links, case studies, service explanations, founder metrics, form behavior, guide delivery, and chat functionality remain present.
+- All 11 HTML pages pass H1, duplicate ID, local link, fragment, asset, and JSON-LD checks.
+- JavaScript syntax, CSS structure, and content-hashed asset references validate successfully.
+- Local HTTP checks returned 200 for the homepage, assessment page, guide, Connect page, stylesheet, and JavaScript.
+
 ## Passed
 
 - All 11 HTML pages contain one H1 and no duplicate IDs.
