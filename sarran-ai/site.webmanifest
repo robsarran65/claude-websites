@@ -1,0 +1,12 @@
+{
+  "name": "Sarran AI Solutions",
+  "short_name": "Sarran AI",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#05101F",
+  "theme_color": "#05101F",
+  "icons": [
+    { "src": "/assets/sarran-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/sarran-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
